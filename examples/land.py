@@ -7,7 +7,7 @@ import sys
 async def run():
 
     drone = System()
-    await drone.connect(system_address="udp://:1455" + sys.argv[1])
+    # await drone.connect(system_address="udp://:1455" + sys.argv[1])
 
     status_text_task = asyncio.ensure_future(print_status_text(drone))
 
