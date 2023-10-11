@@ -367,49 +367,49 @@ class System:
         else:
             from importlib_resources import path
 
-        try:
-            if sys.platform.startswith('win'):
-                mavsdk_exec_name = "mavsdk_server.exe"
-            else:
-                mavsdk_exec_name = "mavsdk_server"
+#         try:
+#             if sys.platform.startswith('win'):
+#                 mavsdk_exec_name = "mavsdk_server.exe"
+#             else:
+#                 mavsdk_exec_name = "mavsdk_server"
 
-            with path(bin, mavsdk_exec_name) as backend:
-                bin_path_and_args = [os.fspath(backend),
-                                     "-p", str(port),
-                                     "--sysid", str(sysid),
-                                     "--compid", str(compid)]
-                if system_address:
-                    bin_path_and_args.append(system_address)
-                p = subprocess.Popen(bin_path_and_args,
-                                     shell=False,
-                                     stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT)
+#             with path(bin, mavsdk_exec_name) as backend:
+#                 bin_path_and_args = [os.fspath(backend),
+#                                      "-p", str(port),
+#                                      "--sysid", str(sysid),
+#                                      "--compid", str(compid)]
+#                 if system_address:
+#                     bin_path_and_args.append(system_address)
+#                 p = subprocess.Popen(bin_path_and_args,
+#                                      shell=False,
+#                                      stdout=subprocess.PIPE,
+#                                      stderr=subprocess.STDOUT)
 
-                logger = logging.getLogger(__name__)
-                log_thread = _LoggingThread(p.stdout, logger.debug)
-                log_thread.start()
-        except FileNotFoundError:
-            print("""
-This installation does not provide an embedded 'mavsdk_server' binary.
-If you installed using pip, this means that 'mavsdk_server' is not distributed
-for your platform yet (e.g. arm).
+#                 logger = logging.getLogger(__name__)
+#                 log_thread = _LoggingThread(p.stdout, logger.debug)
+#                 log_thread.start()
+#         except FileNotFoundError:
+#             print("""
+# This installation does not provide an embedded 'mavsdk_server' binary.
+# If you installed using pip, this means that 'mavsdk_server' is not distributed
+# for your platform yet (e.g. arm).
 
-You will need to get and run the 'mavsdk_server' binary manually:
+# You will need to get and run the 'mavsdk_server' binary manually:
 
-  1. Download 'mavsdk_server' from: https://github.com/mavlink/mavsdk/releases
-     or build it from source.
+#   1. Download 'mavsdk_server' from: https://github.com/mavlink/mavsdk/releases
+#      or build it from source.
 
-  2. Run it, e.g. on port 50051:
-     './mavsdk_server -p 50051'
+#   2. Run it, e.g. on port 50051:
+#      './mavsdk_server -p 50051'
 
-  3. Set the 'mavsdk_server_address' and port when creating the System:
-     'drone = System(mavsdk_server_address='localhost', port=50051)'
-""")
-            sys.exit(1)
+#   3. Set the 'mavsdk_server_address' and port when creating the System:
+#      'drone = System(mavsdk_server_address='localhost', port=50051)'
+# """)
+#             sys.exit(1)
 
-        def cleanup():
-            p.kill()
+#         def cleanup():
+#             p.kill()
 
-        atexit.register(cleanup)
+#         atexit.register(cleanup)
 
-        return p
+#         return p
