@@ -1,3 +1,9 @@
+- `MAVSDK-Python` needs to checkout to branch *valtec_dev_multi-connection*.
+- `MAVSDK-Python/proto` needs to checkout to branch *valtec_dev_multi-connection*.
+- Do [installation](https://github.com/neilvaltec/MAVSDK-Python/tree/valtec_dev_multi-connection#install-prerequisites), then [generate the proto code](https://github.com/neilvaltec/MAVSDK-Python/tree/valtec_dev_multi-connection#generate-the-code).
+
+
+---
 # MAVSDK-Python
 
 [![GitHub Actions Status](https://github.com/mavlink/MAVSDK-Python/workflows/PyPi%20Upload/badge.svg?branch=main)](https://github.com/mavlink/MAVSDK-Python/actions?query=branch%3Amain)
