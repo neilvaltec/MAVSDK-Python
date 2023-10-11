@@ -7,7 +7,7 @@ import sys
 async def run():
     # Init the drone
     drone = System()
-    # await drone.connect(system_address="udp://:1455" + sys.argv[1])
+    await drone.connect()
     
 
     # Start the tasks
