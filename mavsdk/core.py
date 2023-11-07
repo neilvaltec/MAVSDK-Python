@@ -136,3 +136,31 @@ class Core(AsyncBase):
         response = await self._stub.SetMavlinkTimeout(request)
 
         
+
+    async def add_new_connection(self, connection_url):
+        """
+         Add new drone to the mavsdk.
+
+         Parameters
+         ----------
+         connection_url : std::string
+             
+         Returns
+         -------
+         succeed : bool
+              Connection state
+
+         
+        """
+
+        request = core_pb2.AddNewConnectionRequest()
+        
+            
+        request.connection_url = connection_url
+            
+        response = await self._stub.AddNewConnection(request)
+
+        
+
+        return response.succeed
+        

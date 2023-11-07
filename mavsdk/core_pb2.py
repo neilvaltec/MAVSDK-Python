@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x63ore/core.proto\x12\x0fmavsdk.rpc.core\"3\n\x1fSubscribeConnectionStateRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\"U\n\x17\x43onnectionStateResponse\x12:\n\x10\x63onnection_state\x18\x01 \x01(\x0b\x32 .mavsdk.rpc.core.ConnectionState\"?\n\x18SetMavlinkTimeoutRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x11\n\ttimeout_s\x18\x02 \x01(\x01\"\x1b\n\x19SetMavlinkTimeoutResponse\"\'\n\x0f\x43onnectionState\x12\x14\n\x0cis_connected\x18\x02 \x01(\x08\x32\xf7\x01\n\x0b\x43oreService\x12z\n\x18SubscribeConnectionState\x12\x30.mavsdk.rpc.core.SubscribeConnectionStateRequest\x1a(.mavsdk.rpc.core.ConnectionStateResponse\"\x00\x30\x01\x12l\n\x11SetMavlinkTimeout\x12).mavsdk.rpc.core.SetMavlinkTimeoutRequest\x1a*.mavsdk.rpc.core.SetMavlinkTimeoutResponse\"\x00\x42\x1b\n\x0eio.mavsdk.coreB\tCoreProtob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x63ore/core.proto\x12\x0fmavsdk.rpc.core\"3\n\x1fSubscribeConnectionStateRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\"U\n\x17\x43onnectionStateResponse\x12:\n\x10\x63onnection_state\x18\x01 \x01(\x0b\x32 .mavsdk.rpc.core.ConnectionState\"?\n\x18SetMavlinkTimeoutRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x11\n\ttimeout_s\x18\x02 \x01(\x01\"\x1b\n\x19SetMavlinkTimeoutResponse\"\'\n\x0f\x43onnectionState\x12\x14\n\x0cis_connected\x18\x02 \x01(\x08\"1\n\x17\x41\x64\x64NewConnectionRequest\x12\x16\n\x0e\x63onnection_url\x18\x01 \x01(\t\"+\n\x18\x41\x64\x64NewConnectionResponse\x12\x0f\n\x07succeed\x18\x01 \x01(\x08\x32\xe2\x02\n\x0b\x43oreService\x12z\n\x18SubscribeConnectionState\x12\x30.mavsdk.rpc.core.SubscribeConnectionStateRequest\x1a(.mavsdk.rpc.core.ConnectionStateResponse\"\x00\x30\x01\x12l\n\x11SetMavlinkTimeout\x12).mavsdk.rpc.core.SetMavlinkTimeoutRequest\x1a*.mavsdk.rpc.core.SetMavlinkTimeoutResponse\"\x00\x12i\n\x10\x41\x64\x64NewConnection\x12(.mavsdk.rpc.core.AddNewConnectionRequest\x1a).mavsdk.rpc.core.AddNewConnectionResponse\"\x00\x42\x1b\n\x0eio.mavsdk.coreB\tCoreProtob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -31,6 +31,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_SETMAVLINKTIMEOUTRESPONSE']._serialized_end=268
   _globals['_CONNECTIONSTATE']._serialized_start=270
   _globals['_CONNECTIONSTATE']._serialized_end=309
-  _globals['_CORESERVICE']._serialized_start=312
-  _globals['_CORESERVICE']._serialized_end=559
+  _globals['_ADDNEWCONNECTIONREQUEST']._serialized_start=311
+  _globals['_ADDNEWCONNECTIONREQUEST']._serialized_end=360
+  _globals['_ADDNEWCONNECTIONRESPONSE']._serialized_start=362
+  _globals['_ADDNEWCONNECTIONRESPONSE']._serialized_end=405
+  _globals['_CORESERVICE']._serialized_start=408
+  _globals['_CORESERVICE']._serialized_end=762
 # @@protoc_insertion_point(module_scope)
