@@ -109,8 +109,8 @@ class System:
         #     # add a delay to be sure recourses have been freed and restart mavsdk_server
         #     import time; time.sleep(1)
 
-        # if self._mavsdk_server_address is None:
-        #     self._mavsdk_server_address = 'localhost'
+        if self._mavsdk_server_address is None:
+            self._mavsdk_server_address = 'localhost'
             # self._server_process = self._start_mavsdkgit_server(system_address,self._port, self._sysid, self._compid)
 
         await self._init_plugins(self._mavsdk_server_address, self._port)
