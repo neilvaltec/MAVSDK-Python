@@ -85,7 +85,7 @@ class System:
     def __del__(self):
         self._stop_mavsdk_server()
 
-    async def connect(self, system_address=None):
+    async def start(self, system_address=None):
         """
         Connect the System object to a remote system.
 
@@ -101,17 +101,17 @@ class System:
 
         """
 
-        if self._server_process is not None:
-            # a mavsdk_server have already been launch by this instance:
-            # --> clean all before trying to reconnect
-            self._stop_mavsdk_server()
+        # if self._server_process is not None:
+        #     # a mavsdk_server have already been launch by this instance:
+        #     # --> clean all before trying to reconnect
+        #     self._stop_mavsdk_server()
 
-            # add a delay to be sure recourses have been freed and restart mavsdk_server
-            import time; time.sleep(1)
+        #     # add a delay to be sure recourses have been freed and restart mavsdk_server
+        #     import time; time.sleep(1)
 
-        if self._mavsdk_server_address is None:
-            self._mavsdk_server_address = 'localhost'
-            self._server_process = self._start_mavsdk_server(system_address,self._port, self._sysid, self._compid)
+        # if self._mavsdk_server_address is None:
+        #     self._mavsdk_server_address = 'localhost'
+            # self._server_process = self._start_mavsdkgit_server(system_address,self._port, self._sysid, self._compid)
 
         await self._init_plugins(self._mavsdk_server_address, self._port)
 
