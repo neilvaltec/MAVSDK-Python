@@ -1130,10 +1130,14 @@ class Offboard(AsyncBase):
         return OffboardResult.translate_from_rpc(response.offboard_result)
     
 
-    async def start(self):
+    async def start(self, drone_id):
         """
          Start offboard control.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          OffboardError
@@ -1141,21 +1145,26 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.StartRequest()
+        request.drone_id = drone_id
         response = await self._stub.Start(request)
 
         
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "start()")
+            raise OffboardError(result, "start()", drone_id)
         
 
-    async def stop(self):
+    async def stop(self, drone_id):
         """
          Stop offboard control.
 
          The vehicle will be put into Hold mode: https://docs.px4.io/en/flight_modes/hold.html
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          OffboardError
@@ -1163,22 +1172,27 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.StopRequest()
+        request.drone_id = drone_id
         response = await self._stub.Stop(request)
 
         
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "stop()")
+            raise OffboardError(result, "stop()", drone_id)
         
 
-    async def is_active(self):
+    async def is_active(self, drone_id):
         """
          Check if offboard control is active.
 
          True means that the vehicle is in offboard mode and we are actively sending
          setpoints.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          is_active : bool
@@ -1188,6 +1202,10 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.IsActiveRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.IsActive(request)
 
         
@@ -1195,12 +1213,14 @@ class Offboard(AsyncBase):
         return response.is_active
         
 
-    async def set_attitude(self, attitude):
+    async def set_attitude(self, drone_id, attitude):
         """
          Set the attitude in terms of roll, pitch and yaw in degrees with thrust.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          attitude : Attitude
               Attitude roll, pitch and yaw along with thrust
 
@@ -1211,6 +1231,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetAttitudeRequest()
+        request.drone_id = drone_id
         
         attitude.translate_to_rpc(request.attitude)
                 
@@ -1221,10 +1242,10 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_attitude()", attitude)
+            raise OffboardError(result, "set_attitude()", drone_id, attitude)
         
 
-    async def set_actuator_control(self, actuator_control):
+    async def set_actuator_control(self, drone_id, actuator_control):
         """
          Set direct actuator control values to groups #0 and #1.
 
@@ -1233,6 +1254,8 @@ class Offboard(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          actuator_control : ActuatorControl
               Actuator control values
 
@@ -1243,6 +1266,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetActuatorControlRequest()
+        request.drone_id = drone_id
         
         actuator_control.translate_to_rpc(request.actuator_control)
                 
@@ -1253,15 +1277,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_actuator_control()", actuator_control)
+            raise OffboardError(result, "set_actuator_control()", drone_id, actuator_control)
         
 
-    async def set_attitude_rate(self, attitude_rate):
+    async def set_attitude_rate(self, drone_id, attitude_rate):
         """
          Set the attitude rate in terms of pitch, roll and yaw angular rate along with thrust.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          attitude_rate : AttitudeRate
               Attitude rate roll, pitch and yaw angular rate along with thrust
 
@@ -1272,6 +1298,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetAttitudeRateRequest()
+        request.drone_id = drone_id
         
         attitude_rate.translate_to_rpc(request.attitude_rate)
                 
@@ -1282,15 +1309,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_attitude_rate()", attitude_rate)
+            raise OffboardError(result, "set_attitude_rate()", drone_id, attitude_rate)
         
 
-    async def set_position_ned(self, position_ned_yaw):
+    async def set_position_ned(self, drone_id, position_ned_yaw):
         """
          Set the position in NED coordinates and yaw.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          position_ned_yaw : PositionNedYaw
               Position and yaw
 
@@ -1301,6 +1330,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetPositionNedRequest()
+        request.drone_id = drone_id
         
         position_ned_yaw.translate_to_rpc(request.position_ned_yaw)
                 
@@ -1311,15 +1341,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_position_ned()", position_ned_yaw)
+            raise OffboardError(result, "set_position_ned()", drone_id, position_ned_yaw)
         
 
-    async def set_position_global(self, position_global_yaw):
+    async def set_position_global(self, drone_id, position_global_yaw):
         """
          Set the position in Global coordinates (latitude, longitude, altitude) and yaw
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          position_global_yaw : PositionGlobalYaw
               Position and yaw
 
@@ -1330,6 +1362,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetPositionGlobalRequest()
+        request.drone_id = drone_id
         
         position_global_yaw.translate_to_rpc(request.position_global_yaw)
                 
@@ -1340,15 +1373,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_position_global()", position_global_yaw)
+            raise OffboardError(result, "set_position_global()", drone_id, position_global_yaw)
         
 
-    async def set_velocity_body(self, velocity_body_yawspeed):
+    async def set_velocity_body(self, drone_id, velocity_body_yawspeed):
         """
          Set the velocity in body coordinates and yaw angular rate. Not available for fixed-wing aircraft.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          velocity_body_yawspeed : VelocityBodyYawspeed
               Velocity and yaw angular rate
 
@@ -1359,6 +1394,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetVelocityBodyRequest()
+        request.drone_id = drone_id
         
         velocity_body_yawspeed.translate_to_rpc(request.velocity_body_yawspeed)
                 
@@ -1369,15 +1405,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_velocity_body()", velocity_body_yawspeed)
+            raise OffboardError(result, "set_velocity_body()", drone_id, velocity_body_yawspeed)
         
 
-    async def set_velocity_ned(self, velocity_ned_yaw):
+    async def set_velocity_ned(self, drone_id, velocity_ned_yaw):
         """
          Set the velocity in NED coordinates and yaw. Not available for fixed-wing aircraft.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          velocity_ned_yaw : VelocityNedYaw
               Velocity and yaw
 
@@ -1388,6 +1426,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetVelocityNedRequest()
+        request.drone_id = drone_id
         
         velocity_ned_yaw.translate_to_rpc(request.velocity_ned_yaw)
                 
@@ -1398,15 +1437,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_velocity_ned()", velocity_ned_yaw)
+            raise OffboardError(result, "set_velocity_ned()", drone_id, velocity_ned_yaw)
         
 
-    async def set_position_velocity_ned(self, position_ned_yaw, velocity_ned_yaw):
+    async def set_position_velocity_ned(self, drone_id, position_ned_yaw, velocity_ned_yaw):
         """
          Set the position in NED coordinates, with the velocity to be used as feed-forward.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          position_ned_yaw : PositionNedYaw
               Position and yaw
 
@@ -1420,6 +1461,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetPositionVelocityNedRequest()
+        request.drone_id = drone_id
         
         position_ned_yaw.translate_to_rpc(request.position_ned_yaw)
                 
@@ -1434,15 +1476,17 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_position_velocity_ned()", position_ned_yaw, velocity_ned_yaw)
+            raise OffboardError(result, "set_position_velocity_ned()", drone_id, position_ned_yaw, velocity_ned_yaw)
         
 
-    async def set_acceleration_ned(self, acceleration_ned):
+    async def set_acceleration_ned(self, drone_id, acceleration_ned):
         """
          Set the acceleration in NED coordinates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          acceleration_ned : AccelerationNed
               Acceleration
 
@@ -1453,6 +1497,7 @@ class Offboard(AsyncBase):
         """
 
         request = offboard_pb2.SetAccelerationNedRequest()
+        request.drone_id = drone_id
         
         acceleration_ned.translate_to_rpc(request.acceleration_ned)
                 
@@ -1463,5 +1508,5 @@ class Offboard(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != OffboardResult.Result.SUCCESS:
-            raise OffboardError(result, "set_acceleration_ned()", acceleration_ned)
+            raise OffboardError(result, "set_acceleration_ned()", drone_id, acceleration_ned)
         

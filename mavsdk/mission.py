@@ -879,7 +879,7 @@ class Mission(AsyncBase):
         return MissionResult.translate_from_rpc(response.mission_result)
     
 
-    async def upload_mission(self, mission_plan):
+    async def upload_mission(self, drone_id, mission_plan):
         """
          Upload a list of mission items to the system.
 
@@ -888,6 +888,8 @@ class Mission(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          mission_plan : MissionPlan
               The mission plan
 
@@ -898,6 +900,7 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.UploadMissionRequest()
+        request.drone_id = drone_id
         
         mission_plan.translate_to_rpc(request.mission_plan)
                 
@@ -908,10 +911,10 @@ class Mission(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "upload_mission()", mission_plan)
+            raise MissionError(result, "upload_mission()", drone_id, mission_plan)
         
 
-    async def upload_mission_with_progress(self, mission_plan):
+    async def upload_mission_with_progress(self, drone_id, mission_plan):
         """
          Upload a list of mission items to the system and report upload progress.
 
@@ -920,6 +923,8 @@ class Mission(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          mission_plan : MissionPlan
               The mission plan
 
@@ -935,6 +940,7 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.SubscribeUploadMissionWithProgressRequest()
+        request.drone_id = drone_id
         
         mission_plan.translate_to_rpc(request.mission_plan)
                 
@@ -951,7 +957,7 @@ class Mission(AsyncBase):
                     success_codes.append(MissionResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise MissionError(result, "upload_mission_with_progress()", mission_plan)
+                    raise MissionError(result, "upload_mission_with_progress()", drone_id, mission_plan)
 
                 if result.result == MissionResult.Result.SUCCESS:
                     upload_mission_with_progress_stream.cancel();
@@ -963,10 +969,14 @@ class Mission(AsyncBase):
         finally:
             upload_mission_with_progress_stream.cancel()
 
-    async def cancel_mission_upload(self):
+    async def cancel_mission_upload(self, drone_id):
         """
          Cancel an ongoing mission upload.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionError
@@ -974,22 +984,27 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.CancelMissionUploadRequest()
+        request.drone_id = drone_id
         response = await self._stub.CancelMissionUpload(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "cancel_mission_upload()")
+            raise MissionError(result, "cancel_mission_upload()", drone_id)
         
 
-    async def download_mission(self):
+    async def download_mission(self, drone_id):
         """
          Download a list of mission items from the system (asynchronous).
 
          Will fail if any of the downloaded mission items are not supported
          by the MAVSDK API.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          mission_plan : MissionPlan
@@ -1002,25 +1017,33 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.DownloadMissionRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.DownloadMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "download_mission()")
+            raise MissionError(result, "download_mission()", drone_id)
         
 
         return MissionPlan.translate_from_rpc(response.mission_plan)
             
 
-    async def download_mission_with_progress(self):
+    async def download_mission_with_progress(self, drone_id):
         """
          Download a list of mission items from the system (asynchronous) and report progress.
 
          Will fail if any of the downloaded mission items are not supported
          by the MAVSDK API.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          progress_data : ProgressDataOrMission
@@ -1033,6 +1056,7 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.SubscribeDownloadMissionWithProgressRequest()
+        request.drone_id = drone_id
         download_mission_with_progress_stream = self._stub.SubscribeDownloadMissionWithProgress(request)
 
         try:
@@ -1045,7 +1069,7 @@ class Mission(AsyncBase):
                     success_codes.append(MissionResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise MissionError(result, "download_mission_with_progress()")
+                    raise MissionError(result, "download_mission_with_progress()", drone_id)
 
                 if result.result == MissionResult.Result.SUCCESS:
                     download_mission_with_progress_stream.cancel();
@@ -1057,10 +1081,14 @@ class Mission(AsyncBase):
         finally:
             download_mission_with_progress_stream.cancel()
 
-    async def cancel_mission_download(self):
+    async def cancel_mission_download(self, drone_id):
         """
          Cancel an ongoing mission download.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionError
@@ -1068,21 +1096,26 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.CancelMissionDownloadRequest()
+        request.drone_id = drone_id
         response = await self._stub.CancelMissionDownload(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "cancel_mission_download()")
+            raise MissionError(result, "cancel_mission_download()", drone_id)
         
 
-    async def start_mission(self):
+    async def start_mission(self, drone_id):
         """
          Start the mission.
 
          A mission must be uploaded to the vehicle before this can be called.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionError
@@ -1090,16 +1123,17 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.StartMissionRequest()
+        request.drone_id = drone_id
         response = await self._stub.StartMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "start_mission()")
+            raise MissionError(result, "start_mission()", drone_id)
         
 
-    async def pause_mission(self):
+    async def pause_mission(self, drone_id):
         """
          Pause the mission.
 
@@ -1108,6 +1142,10 @@ class Mission(AsyncBase):
          A multicopter should just hover at the spot while a fixedwing vehicle should loiter
          around the location where it paused.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionError
@@ -1115,19 +1153,24 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.PauseMissionRequest()
+        request.drone_id = drone_id
         response = await self._stub.PauseMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "pause_mission()")
+            raise MissionError(result, "pause_mission()", drone_id)
         
 
-    async def clear_mission(self):
+    async def clear_mission(self, drone_id):
         """
          Clear the mission saved on the vehicle.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionError
@@ -1135,16 +1178,17 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.ClearMissionRequest()
+        request.drone_id = drone_id
         response = await self._stub.ClearMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "clear_mission()")
+            raise MissionError(result, "clear_mission()", drone_id)
         
 
-    async def set_current_mission_item(self, index):
+    async def set_current_mission_item(self, drone_id, index):
         """
          Sets the mission item index to go to.
 
@@ -1156,6 +1200,8 @@ class Mission(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          index : int32_t
               Index of the mission item to be set as the next one (0-based)
 
@@ -1166,6 +1212,7 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.SetCurrentMissionItemRequest()
+        request.drone_id = drone_id
         request.index = index
         response = await self._stub.SetCurrentMissionItem(request)
 
@@ -1173,13 +1220,17 @@ class Mission(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "set_current_mission_item()", index)
+            raise MissionError(result, "set_current_mission_item()", drone_id, index)
         
 
-    async def is_mission_finished(self):
+    async def is_mission_finished(self, drone_id):
         """
          Check if the mission has been finished.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          is_finished : bool
@@ -1192,22 +1243,30 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.IsMissionFinishedRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.IsMissionFinished(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "is_mission_finished()")
+            raise MissionError(result, "is_mission_finished()", drone_id)
         
 
         return response.is_finished
         
 
-    async def mission_progress(self):
+    async def mission_progress(self, drone_id):
         """
          Subscribe to mission progress updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          mission_progress : MissionProgress
@@ -1217,6 +1276,7 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.SubscribeMissionProgressRequest()
+        request.drone_id = drone_id
         mission_progress_stream = self._stub.SubscribeMissionProgress(request)
 
         try:
@@ -1228,13 +1288,17 @@ class Mission(AsyncBase):
         finally:
             mission_progress_stream.cancel()
 
-    async def get_return_to_launch_after_mission(self):
+    async def get_return_to_launch_after_mission(self, drone_id):
         """
          Get whether to trigger Return-to-Launch (RTL) after mission is complete.
 
          Before getting this option, it needs to be set, or a mission
          needs to be downloaded.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          enable : bool
@@ -1247,19 +1311,23 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.GetReturnToLaunchAfterMissionRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetReturnToLaunchAfterMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "get_return_to_launch_after_mission()")
+            raise MissionError(result, "get_return_to_launch_after_mission()", drone_id)
         
 
         return response.enable
         
 
-    async def set_return_to_launch_after_mission(self, enable):
+    async def set_return_to_launch_after_mission(self, drone_id, enable):
         """
          Set whether to trigger Return-to-Launch (RTL) after the mission is complete.
 
@@ -1268,6 +1336,8 @@ class Mission(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          enable : bool
               If true, trigger an RTL at the end of the mission
 
@@ -1278,6 +1348,7 @@ class Mission(AsyncBase):
         """
 
         request = mission_pb2.SetReturnToLaunchAfterMissionRequest()
+        request.drone_id = drone_id
         request.enable = enable
         response = await self._stub.SetReturnToLaunchAfterMission(request)
 
@@ -1285,5 +1356,5 @@ class Mission(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MissionResult.Result.SUCCESS:
-            raise MissionError(result, "set_return_to_launch_after_mission()", enable)
+            raise MissionError(result, "set_return_to_launch_after_mission()", drone_id, enable)
         

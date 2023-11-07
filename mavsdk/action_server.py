@@ -537,10 +537,14 @@ class ActionServer(AsyncBase):
         return ActionServerResult.translate_from_rpc(response.action_server_result)
     
 
-    async def arm_disarm(self):
+    async def arm_disarm(self, drone_id):
         """
          Subscribe to ARM/DISARM commands
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          arm : ArmDisarm
@@ -552,6 +556,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeArmDisarmRequest()
+        request.drone_id = drone_id
         arm_disarm_stream = self._stub.SubscribeArmDisarm(request)
 
         try:
@@ -564,7 +569,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "arm_disarm()")
+                    raise ActionServerError(result, "arm_disarm()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     arm_disarm_stream.cancel();
@@ -576,10 +581,14 @@ class ActionServer(AsyncBase):
         finally:
             arm_disarm_stream.cancel()
 
-    async def flight_mode_change(self):
+    async def flight_mode_change(self, drone_id):
         """
          Subscribe to DO_SET_MODE
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          flight_mode : FlightMode
@@ -591,6 +600,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeFlightModeChangeRequest()
+        request.drone_id = drone_id
         flight_mode_change_stream = self._stub.SubscribeFlightModeChange(request)
 
         try:
@@ -603,7 +613,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "flight_mode_change()")
+                    raise ActionServerError(result, "flight_mode_change()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     flight_mode_change_stream.cancel();
@@ -615,10 +625,14 @@ class ActionServer(AsyncBase):
         finally:
             flight_mode_change_stream.cancel()
 
-    async def takeoff(self):
+    async def takeoff(self, drone_id):
         """
          Subscribe to takeoff command
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          takeoff : bool
@@ -630,6 +644,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeTakeoffRequest()
+        request.drone_id = drone_id
         takeoff_stream = self._stub.SubscribeTakeoff(request)
 
         try:
@@ -642,7 +657,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "takeoff()")
+                    raise ActionServerError(result, "takeoff()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     takeoff_stream.cancel();
@@ -654,10 +669,14 @@ class ActionServer(AsyncBase):
         finally:
             takeoff_stream.cancel()
 
-    async def land(self):
+    async def land(self, drone_id):
         """
          Subscribe to land command
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          land : bool
@@ -669,6 +688,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeLandRequest()
+        request.drone_id = drone_id
         land_stream = self._stub.SubscribeLand(request)
 
         try:
@@ -681,7 +701,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "land()")
+                    raise ActionServerError(result, "land()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     land_stream.cancel();
@@ -693,10 +713,14 @@ class ActionServer(AsyncBase):
         finally:
             land_stream.cancel()
 
-    async def reboot(self):
+    async def reboot(self, drone_id):
         """
          Subscribe to reboot command
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          reboot : bool
@@ -708,6 +732,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeRebootRequest()
+        request.drone_id = drone_id
         reboot_stream = self._stub.SubscribeReboot(request)
 
         try:
@@ -720,7 +745,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "reboot()")
+                    raise ActionServerError(result, "reboot()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     reboot_stream.cancel();
@@ -732,10 +757,14 @@ class ActionServer(AsyncBase):
         finally:
             reboot_stream.cancel()
 
-    async def shutdown(self):
+    async def shutdown(self, drone_id):
         """
          Subscribe to shutdown command
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          shutdown : bool
@@ -747,6 +776,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeShutdownRequest()
+        request.drone_id = drone_id
         shutdown_stream = self._stub.SubscribeShutdown(request)
 
         try:
@@ -759,7 +789,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "shutdown()")
+                    raise ActionServerError(result, "shutdown()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     shutdown_stream.cancel();
@@ -771,10 +801,14 @@ class ActionServer(AsyncBase):
         finally:
             shutdown_stream.cancel()
 
-    async def terminate(self):
+    async def terminate(self, drone_id):
         """
          Subscribe to terminate command
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          terminate : bool
@@ -786,6 +820,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SubscribeTerminateRequest()
+        request.drone_id = drone_id
         terminate_stream = self._stub.SubscribeTerminate(request)
 
         try:
@@ -798,7 +833,7 @@ class ActionServer(AsyncBase):
                     success_codes.append(ActionServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise ActionServerError(result, "terminate()")
+                    raise ActionServerError(result, "terminate()", drone_id)
 
                 if result.result == ActionServerResult.Result.SUCCESS:
                     terminate_stream.cancel();
@@ -810,12 +845,14 @@ class ActionServer(AsyncBase):
         finally:
             terminate_stream.cancel()
 
-    async def set_allow_takeoff(self, allow_takeoff):
+    async def set_allow_takeoff(self, drone_id, allow_takeoff):
         """
          Can the vehicle takeoff
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          allow_takeoff : bool
               Is takeoff allowed?
 
@@ -826,6 +863,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SetAllowTakeoffRequest()
+        request.drone_id = drone_id
         request.allow_takeoff = allow_takeoff
         response = await self._stub.SetAllowTakeoff(request)
 
@@ -833,15 +871,17 @@ class ActionServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionServerResult.Result.SUCCESS:
-            raise ActionServerError(result, "set_allow_takeoff()", allow_takeoff)
+            raise ActionServerError(result, "set_allow_takeoff()", drone_id, allow_takeoff)
         
 
-    async def set_armable(self, armable, force_armable):
+    async def set_armable(self, drone_id, armable, force_armable):
         """
          Can the vehicle arm when requested
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          armable : bool
               Is Armable now?
 
@@ -855,6 +895,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SetArmableRequest()
+        request.drone_id = drone_id
         request.armable = armable
         request.force_armable = force_armable
         response = await self._stub.SetArmable(request)
@@ -863,15 +904,17 @@ class ActionServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionServerResult.Result.SUCCESS:
-            raise ActionServerError(result, "set_armable()", armable, force_armable)
+            raise ActionServerError(result, "set_armable()", drone_id, armable, force_armable)
         
 
-    async def set_disarmable(self, disarmable, force_disarmable):
+    async def set_disarmable(self, drone_id, disarmable, force_disarmable):
         """
          Can the vehicle disarm when requested
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          disarmable : bool
               Is disarmable now?
 
@@ -885,6 +928,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SetDisarmableRequest()
+        request.drone_id = drone_id
         request.disarmable = disarmable
         request.force_disarmable = force_disarmable
         response = await self._stub.SetDisarmable(request)
@@ -893,15 +937,17 @@ class ActionServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionServerResult.Result.SUCCESS:
-            raise ActionServerError(result, "set_disarmable()", disarmable, force_disarmable)
+            raise ActionServerError(result, "set_disarmable()", drone_id, disarmable, force_disarmable)
         
 
-    async def set_allowable_flight_modes(self, flight_modes):
+    async def set_allowable_flight_modes(self, drone_id, flight_modes):
         """
          Set which modes the vehicle can transition to (Manual always allowed)
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          flight_modes : AllowableFlightModes
              
          Raises
@@ -911,6 +957,7 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.SetAllowableFlightModesRequest()
+        request.drone_id = drone_id
         
         flight_modes.translate_to_rpc(request.flight_modes)
                 
@@ -921,13 +968,17 @@ class ActionServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionServerResult.Result.SUCCESS:
-            raise ActionServerError(result, "set_allowable_flight_modes()", flight_modes)
+            raise ActionServerError(result, "set_allowable_flight_modes()", drone_id, flight_modes)
         
 
-    async def get_allowable_flight_modes(self):
+    async def get_allowable_flight_modes(self, drone_id):
         """
          Get which modes the vehicle can transition to (Manual always allowed)
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          flight_modes : AllowableFlightModes
@@ -936,6 +987,10 @@ class ActionServer(AsyncBase):
         """
 
         request = action_server_pb2.GetAllowableFlightModesRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetAllowableFlightModes(request)
 
         

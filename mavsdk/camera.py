@@ -1852,10 +1852,14 @@ class Camera(AsyncBase):
         return CameraResult.translate_from_rpc(response.camera_result)
     
 
-    async def prepare(self):
+    async def prepare(self, drone_id):
         """
          Prepare the camera plugin (e.g. download the camera definition, etc).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -1863,19 +1867,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.PrepareRequest()
+        request.drone_id = drone_id
         response = await self._stub.Prepare(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "prepare()")
+            raise CameraError(result, "prepare()", drone_id)
         
 
-    async def take_photo(self):
+    async def take_photo(self, drone_id):
         """
          Take one photo.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -1883,21 +1892,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.TakePhotoRequest()
+        request.drone_id = drone_id
         response = await self._stub.TakePhoto(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "take_photo()")
+            raise CameraError(result, "take_photo()", drone_id)
         
 
-    async def start_photo_interval(self, interval_s):
+    async def start_photo_interval(self, drone_id, interval_s):
         """
          Start photo timelapse with a given interval.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          interval_s : float
               Interval between photos (in seconds)
 
@@ -1908,6 +1920,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.StartPhotoIntervalRequest()
+        request.drone_id = drone_id
         request.interval_s = interval_s
         response = await self._stub.StartPhotoInterval(request)
 
@@ -1915,13 +1928,17 @@ class Camera(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "start_photo_interval()", interval_s)
+            raise CameraError(result, "start_photo_interval()", drone_id, interval_s)
         
 
-    async def stop_photo_interval(self):
+    async def stop_photo_interval(self, drone_id):
         """
          Stop a running photo timelapse.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -1929,19 +1946,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.StopPhotoIntervalRequest()
+        request.drone_id = drone_id
         response = await self._stub.StopPhotoInterval(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "stop_photo_interval()")
+            raise CameraError(result, "stop_photo_interval()", drone_id)
         
 
-    async def start_video(self):
+    async def start_video(self, drone_id):
         """
          Start a video recording.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -1949,19 +1971,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.StartVideoRequest()
+        request.drone_id = drone_id
         response = await self._stub.StartVideo(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "start_video()")
+            raise CameraError(result, "start_video()", drone_id)
         
 
-    async def stop_video(self):
+    async def stop_video(self, drone_id):
         """
          Stop a running video recording.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -1969,19 +1996,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.StopVideoRequest()
+        request.drone_id = drone_id
         response = await self._stub.StopVideo(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "stop_video()")
+            raise CameraError(result, "stop_video()", drone_id)
         
 
-    async def start_video_streaming(self):
+    async def start_video_streaming(self, drone_id):
         """
          Start video streaming.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -1989,19 +2021,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.StartVideoStreamingRequest()
+        request.drone_id = drone_id
         response = await self._stub.StartVideoStreaming(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "start_video_streaming()")
+            raise CameraError(result, "start_video_streaming()", drone_id)
         
 
-    async def stop_video_streaming(self):
+    async def stop_video_streaming(self, drone_id):
         """
          Stop current video streaming.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -2009,21 +2046,24 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.StopVideoStreamingRequest()
+        request.drone_id = drone_id
         response = await self._stub.StopVideoStreaming(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "stop_video_streaming()")
+            raise CameraError(result, "stop_video_streaming()", drone_id)
         
 
-    async def set_mode(self, mode):
+    async def set_mode(self, drone_id, mode):
         """
          Set camera mode.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          mode : Mode
               Camera mode to set
 
@@ -2034,6 +2074,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SetModeRequest()
+        request.drone_id = drone_id
         
         request.mode = mode.translate_to_rpc()
                 
@@ -2044,15 +2085,17 @@ class Camera(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "set_mode()", mode)
+            raise CameraError(result, "set_mode()", drone_id, mode)
         
 
-    async def list_photos(self, photos_range):
+    async def list_photos(self, drone_id, photos_range):
         """
          List photos available on the camera.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          photos_range : PhotosRange
               Which photos should be listed (all or since connection)
 
@@ -2070,6 +2113,10 @@ class Camera(AsyncBase):
         request = camera_pb2.ListPhotosRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
                 
         request.photos_range = photos_range.translate_to_rpc()
                 
@@ -2080,7 +2127,7 @@ class Camera(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "list_photos()", photos_range)
+            raise CameraError(result, "list_photos()", drone_id, photos_range)
         
 
         capture_infos = []
@@ -2090,10 +2137,14 @@ class Camera(AsyncBase):
         return capture_infos
             
 
-    async def mode(self):
+    async def mode(self, drone_id):
         """
          Subscribe to camera mode updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          mode : Mode
@@ -2103,6 +2154,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribeModeRequest()
+        request.drone_id = drone_id
         mode_stream = self._stub.SubscribeMode(request)
 
         try:
@@ -2114,10 +2166,14 @@ class Camera(AsyncBase):
         finally:
             mode_stream.cancel()
 
-    async def information(self):
+    async def information(self, drone_id):
         """
          Subscribe to camera information updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          information : Information
@@ -2127,6 +2183,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribeInformationRequest()
+        request.drone_id = drone_id
         information_stream = self._stub.SubscribeInformation(request)
 
         try:
@@ -2138,10 +2195,14 @@ class Camera(AsyncBase):
         finally:
             information_stream.cancel()
 
-    async def video_stream_info(self):
+    async def video_stream_info(self, drone_id):
         """
          Subscribe to video stream info updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          video_stream_info : VideoStreamInfo
@@ -2151,6 +2212,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribeVideoStreamInfoRequest()
+        request.drone_id = drone_id
         video_stream_info_stream = self._stub.SubscribeVideoStreamInfo(request)
 
         try:
@@ -2162,10 +2224,14 @@ class Camera(AsyncBase):
         finally:
             video_stream_info_stream.cancel()
 
-    async def capture_info(self):
+    async def capture_info(self, drone_id):
         """
          Subscribe to capture info updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          capture_info : CaptureInfo
@@ -2175,6 +2241,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribeCaptureInfoRequest()
+        request.drone_id = drone_id
         capture_info_stream = self._stub.SubscribeCaptureInfo(request)
 
         try:
@@ -2186,10 +2253,14 @@ class Camera(AsyncBase):
         finally:
             capture_info_stream.cancel()
 
-    async def status(self):
+    async def status(self, drone_id):
         """
          Subscribe to camera status updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          camera_status : Status
@@ -2199,6 +2270,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribeStatusRequest()
+        request.drone_id = drone_id
         status_stream = self._stub.SubscribeStatus(request)
 
         try:
@@ -2210,10 +2282,14 @@ class Camera(AsyncBase):
         finally:
             status_stream.cancel()
 
-    async def current_settings(self):
+    async def current_settings(self, drone_id):
         """
          Get the list of current camera settings.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          current_settings : [Setting]
@@ -2223,6 +2299,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribeCurrentSettingsRequest()
+        request.drone_id = drone_id
         current_settings_stream = self._stub.SubscribeCurrentSettings(request)
 
         try:
@@ -2234,10 +2311,14 @@ class Camera(AsyncBase):
         finally:
             current_settings_stream.cancel()
 
-    async def possible_setting_options(self):
+    async def possible_setting_options(self, drone_id):
         """
          Get the list of settings that can be changed.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          setting_options : [SettingOptions]
@@ -2247,6 +2328,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SubscribePossibleSettingOptionsRequest()
+        request.drone_id = drone_id
         possible_setting_options_stream = self._stub.SubscribePossibleSettingOptions(request)
 
         try:
@@ -2258,7 +2340,7 @@ class Camera(AsyncBase):
         finally:
             possible_setting_options_stream.cancel()
 
-    async def set_setting(self, setting):
+    async def set_setting(self, drone_id, setting):
         """
          Set a setting to some value.
 
@@ -2266,6 +2348,8 @@ class Camera(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          setting : Setting
               Desired setting
 
@@ -2276,6 +2360,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SetSettingRequest()
+        request.drone_id = drone_id
         
         setting.translate_to_rpc(request.setting)
                 
@@ -2286,10 +2371,10 @@ class Camera(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "set_setting()", setting)
+            raise CameraError(result, "set_setting()", drone_id, setting)
         
 
-    async def get_setting(self, setting):
+    async def get_setting(self, drone_id, setting):
         """
          Get a setting.
 
@@ -2297,6 +2382,8 @@ class Camera(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          setting : Setting
               Requested setting
 
@@ -2314,6 +2401,10 @@ class Camera(AsyncBase):
         request = camera_pb2.GetSettingRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
                 
         setting.translate_to_rpc(request.setting)
                 
@@ -2324,18 +2415,22 @@ class Camera(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "get_setting()", setting)
+            raise CameraError(result, "get_setting()", drone_id, setting)
         
 
         return Setting.translate_from_rpc(response.setting)
             
 
-    async def format_storage(self):
+    async def format_storage(self, drone_id):
         """
          Format storage (e.g. SD card) in camera.
 
          This will delete all content of the camera storage!
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CameraError
@@ -2343,16 +2438,17 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.FormatStorageRequest()
+        request.drone_id = drone_id
         response = await self._stub.FormatStorage(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "format_storage()")
+            raise CameraError(result, "format_storage()", drone_id)
         
 
-    async def select_camera(self, camera_id):
+    async def select_camera(self, drone_id, camera_id):
         """
          Select current camera .
 
@@ -2360,6 +2456,8 @@ class Camera(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          camera_id : int32_t
               Id of camera to be selected
 
@@ -2370,6 +2468,7 @@ class Camera(AsyncBase):
         """
 
         request = camera_pb2.SelectCameraRequest()
+        request.drone_id = drone_id
         request.camera_id = camera_id
         response = await self._stub.SelectCamera(request)
 
@@ -2377,5 +2476,5 @@ class Camera(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != CameraResult.Result.SUCCESS:
-            raise CameraError(result, "select_camera()", camera_id)
+            raise CameraError(result, "select_camera()", drone_id, camera_id)
         

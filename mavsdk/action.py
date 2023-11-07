@@ -297,13 +297,17 @@ class Action(AsyncBase):
         return ActionResult.translate_from_rpc(response.action_result)
     
 
-    async def arm(self):
+    async def arm(self, drone_id):
         """
          Send command to arm the drone.
 
          Arming a drone normally causes motors to spin at idle.
          Before arming take all safety precautions and stand clear of the drone!
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -311,22 +315,27 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.ArmRequest()
+        request.drone_id = drone_id
         response = await self._stub.Arm(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "arm()")
+            raise ActionError(result, "arm()", drone_id)
         
 
-    async def disarm(self):
+    async def disarm(self, drone_id):
         """
          Send command to disarm the drone.
 
          This will disarm a drone that considers itself landed. If flying, the drone should
          reject the disarm command. Disarming means that all motors will stop.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -334,16 +343,17 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.DisarmRequest()
+        request.drone_id = drone_id
         response = await self._stub.Disarm(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "disarm()")
+            raise ActionError(result, "disarm()", drone_id)
         
 
-    async def takeoff(self):
+    async def takeoff(self, drone_id):
         """
          Send command to take off and hover.
 
@@ -352,6 +362,10 @@ class Action(AsyncBase):
 
          Note that the vehicle must be armed before it can take off.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -359,21 +373,26 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.TakeoffRequest()
+        request.drone_id = drone_id
         response = await self._stub.Takeoff(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "takeoff()")
+            raise ActionError(result, "takeoff()", drone_id)
         
 
-    async def land(self):
+    async def land(self, drone_id):
         """
          Send command to land at the current position.
 
          This switches the drone to 'Land' flight mode.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -381,21 +400,26 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.LandRequest()
+        request.drone_id = drone_id
         response = await self._stub.Land(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "land()")
+            raise ActionError(result, "land()", drone_id)
         
 
-    async def reboot(self):
+    async def reboot(self, drone_id):
         """
          Send command to reboot the drone components.
 
          This will reboot the autopilot, companion computer, camera and gimbal.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -403,16 +427,17 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.RebootRequest()
+        request.drone_id = drone_id
         response = await self._stub.Reboot(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "reboot()")
+            raise ActionError(result, "reboot()", drone_id)
         
 
-    async def shutdown(self):
+    async def shutdown(self, drone_id):
         """
          Send command to shut down the drone components.
 
@@ -420,6 +445,10 @@ class Action(AsyncBase):
          This command should only be used when the autopilot is disarmed and autopilots commonly
          reject it if they are not already ready to shut down.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -427,21 +456,26 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.ShutdownRequest()
+        request.drone_id = drone_id
         response = await self._stub.Shutdown(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "shutdown()")
+            raise ActionError(result, "shutdown()", drone_id)
         
 
-    async def terminate(self):
+    async def terminate(self, drone_id):
         """
          Send command to terminate the drone.
 
          This will run the terminate routine as configured on the drone (e.g. disarm and open the parachute).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -449,22 +483,27 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.TerminateRequest()
+        request.drone_id = drone_id
         response = await self._stub.Terminate(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "terminate()")
+            raise ActionError(result, "terminate()", drone_id)
         
 
-    async def kill(self):
+    async def kill(self, drone_id):
         """
          Send command to kill the drone.
 
          This will disarm a drone irrespective of whether it is landed or flying.
          Note that the drone will fall out of the sky if this command is used while flying.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -472,16 +511,17 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.KillRequest()
+        request.drone_id = drone_id
         response = await self._stub.Kill(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "kill()")
+            raise ActionError(result, "kill()", drone_id)
         
 
-    async def return_to_launch(self):
+    async def return_to_launch(self, drone_id):
         """
          Send command to return to the launch (takeoff) position and land.
 
@@ -489,6 +529,10 @@ class Action(AsyncBase):
          generally means it will rise up to a certain altitude to clear any obstacles before heading
          back to the launch (takeoff) position and land there.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -496,16 +540,17 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.ReturnToLaunchRequest()
+        request.drone_id = drone_id
         response = await self._stub.ReturnToLaunch(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "return_to_launch()")
+            raise ActionError(result, "return_to_launch()", drone_id)
         
 
-    async def goto_location(self, latitude_deg, longitude_deg, absolute_altitude_m, yaw_deg):
+    async def goto_location(self, drone_id, latitude_deg, longitude_deg, absolute_altitude_m, yaw_deg):
         """
          Send command to move the vehicle to a specific global position.
 
@@ -516,6 +561,8 @@ class Action(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          latitude_deg : double
               Latitude (in degrees)
 
@@ -535,6 +582,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.GotoLocationRequest()
+        request.drone_id = drone_id
         request.latitude_deg = latitude_deg
         request.longitude_deg = longitude_deg
         request.absolute_altitude_m = absolute_altitude_m
@@ -545,10 +593,10 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "goto_location()", latitude_deg, longitude_deg, absolute_altitude_m, yaw_deg)
+            raise ActionError(result, "goto_location()", drone_id, latitude_deg, longitude_deg, absolute_altitude_m, yaw_deg)
         
 
-    async def do_orbit(self, radius_m, velocity_ms, yaw_behavior, latitude_deg, longitude_deg, absolute_altitude_m):
+    async def do_orbit(self, drone_id, radius_m, velocity_ms, yaw_behavior, latitude_deg, longitude_deg, absolute_altitude_m):
         """
          Send command do orbit to the drone.
 
@@ -556,6 +604,8 @@ class Action(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          radius_m : float
               Radius of circle (in meters)
 
@@ -581,6 +631,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.DoOrbitRequest()
+        request.drone_id = drone_id
         request.radius_m = radius_m
         request.velocity_ms = velocity_ms
         
@@ -596,10 +647,10 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "do_orbit()", radius_m, velocity_ms, yaw_behavior, latitude_deg, longitude_deg, absolute_altitude_m)
+            raise ActionError(result, "do_orbit()", drone_id, radius_m, velocity_ms, yaw_behavior, latitude_deg, longitude_deg, absolute_altitude_m)
         
 
-    async def hold(self):
+    async def hold(self, drone_id):
         """
          Send command to hold position (a.k.a. "Loiter").
 
@@ -609,6 +660,10 @@ class Action(AsyncBase):
          Note: this command is specific to the PX4 Autopilot flight stack as
          it implies a change to a PX4-specific mode.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -616,21 +671,24 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.HoldRequest()
+        request.drone_id = drone_id
         response = await self._stub.Hold(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "hold()")
+            raise ActionError(result, "hold()", drone_id)
         
 
-    async def set_actuator(self, index, value):
+    async def set_actuator(self, drone_id, index, value):
         """
          Send command to set the value of an actuator.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          index : int32_t
               Index of actuator (starting with 1)
 
@@ -644,6 +702,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.SetActuatorRequest()
+        request.drone_id = drone_id
         request.index = index
         request.value = value
         response = await self._stub.SetActuator(request)
@@ -652,10 +711,10 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "set_actuator()", index, value)
+            raise ActionError(result, "set_actuator()", drone_id, index, value)
         
 
-    async def transition_to_fixedwing(self):
+    async def transition_to_fixedwing(self, drone_id):
         """
          Send command to transition the drone to fixedwing.
 
@@ -663,6 +722,10 @@ class Action(AsyncBase):
          command will fail). The command will succeed if called when the vehicle
          is already in fixedwing mode.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -670,16 +733,17 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.TransitionToFixedwingRequest()
+        request.drone_id = drone_id
         response = await self._stub.TransitionToFixedwing(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "transition_to_fixedwing()")
+            raise ActionError(result, "transition_to_fixedwing()", drone_id)
         
 
-    async def transition_to_multicopter(self):
+    async def transition_to_multicopter(self, drone_id):
         """
          Send command to transition the drone to multicopter.
 
@@ -687,6 +751,10 @@ class Action(AsyncBase):
          command will fail). The command will succeed if called when the vehicle
          is already in multicopter mode.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ActionError
@@ -694,19 +762,24 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.TransitionToMulticopterRequest()
+        request.drone_id = drone_id
         response = await self._stub.TransitionToMulticopter(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "transition_to_multicopter()")
+            raise ActionError(result, "transition_to_multicopter()", drone_id)
         
 
-    async def get_takeoff_altitude(self):
+    async def get_takeoff_altitude(self, drone_id):
         """
          Get the takeoff altitude (in meters above ground).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          altitude : float
@@ -719,24 +792,30 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.GetTakeoffAltitudeRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetTakeoffAltitude(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "get_takeoff_altitude()")
+            raise ActionError(result, "get_takeoff_altitude()", drone_id)
         
 
         return response.altitude
         
 
-    async def set_takeoff_altitude(self, altitude):
+    async def set_takeoff_altitude(self, drone_id, altitude):
         """
          Set takeoff altitude (in meters above ground).
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          altitude : float
               Takeoff altitude relative to ground/takeoff location (in meters)
 
@@ -747,6 +826,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.SetTakeoffAltitudeRequest()
+        request.drone_id = drone_id
         request.altitude = altitude
         response = await self._stub.SetTakeoffAltitude(request)
 
@@ -754,13 +834,17 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "set_takeoff_altitude()", altitude)
+            raise ActionError(result, "set_takeoff_altitude()", drone_id, altitude)
         
 
-    async def get_maximum_speed(self):
+    async def get_maximum_speed(self, drone_id):
         """
          Get the vehicle maximum speed (in metres/second).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          speed : float
@@ -773,24 +857,30 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.GetMaximumSpeedRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetMaximumSpeed(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "get_maximum_speed()")
+            raise ActionError(result, "get_maximum_speed()", drone_id)
         
 
         return response.speed
         
 
-    async def set_maximum_speed(self, speed):
+    async def set_maximum_speed(self, drone_id, speed):
         """
          Set vehicle maximum speed (in metres/second).
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          speed : float
               Maximum speed (in metres/second)
 
@@ -801,6 +891,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.SetMaximumSpeedRequest()
+        request.drone_id = drone_id
         request.speed = speed
         response = await self._stub.SetMaximumSpeed(request)
 
@@ -808,13 +899,17 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "set_maximum_speed()", speed)
+            raise ActionError(result, "set_maximum_speed()", drone_id, speed)
         
 
-    async def get_return_to_launch_altitude(self):
+    async def get_return_to_launch_altitude(self, drone_id):
         """
          Get the return to launch minimum return altitude (in meters).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          relative_altitude_m : float
@@ -827,24 +922,30 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.GetReturnToLaunchAltitudeRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetReturnToLaunchAltitude(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "get_return_to_launch_altitude()")
+            raise ActionError(result, "get_return_to_launch_altitude()", drone_id)
         
 
         return response.relative_altitude_m
         
 
-    async def set_return_to_launch_altitude(self, relative_altitude_m):
+    async def set_return_to_launch_altitude(self, drone_id, relative_altitude_m):
         """
          Set the return to launch minimum return altitude (in meters).
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          relative_altitude_m : float
               Return altitude relative to takeoff location (in meters)
 
@@ -855,6 +956,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.SetReturnToLaunchAltitudeRequest()
+        request.drone_id = drone_id
         request.relative_altitude_m = relative_altitude_m
         response = await self._stub.SetReturnToLaunchAltitude(request)
 
@@ -862,10 +964,10 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "set_return_to_launch_altitude()", relative_altitude_m)
+            raise ActionError(result, "set_return_to_launch_altitude()", drone_id, relative_altitude_m)
         
 
-    async def set_current_speed(self, speed_m_s):
+    async def set_current_speed(self, drone_id, speed_m_s):
         """
          Set current speed.
 
@@ -874,6 +976,8 @@ class Action(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          speed_m_s : float
               Speed in meters/second
 
@@ -884,6 +988,7 @@ class Action(AsyncBase):
         """
 
         request = action_pb2.SetCurrentSpeedRequest()
+        request.drone_id = drone_id
         request.speed_m_s = speed_m_s
         response = await self._stub.SetCurrentSpeed(request)
 
@@ -891,5 +996,5 @@ class Action(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ActionResult.Result.SUCCESS:
-            raise ActionError(result, "set_current_speed()", speed_m_s)
+            raise ActionError(result, "set_current_speed()", drone_id, speed_m_s)
         

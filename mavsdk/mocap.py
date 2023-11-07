@@ -1137,12 +1137,14 @@ class Mocap(AsyncBase):
         return MocapResult.translate_from_rpc(response.mocap_result)
     
 
-    async def set_vision_position_estimate(self, vision_position_estimate):
+    async def set_vision_position_estimate(self, drone_id, vision_position_estimate):
         """
          Send Global position/attitude estimate from a vision source.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          vision_position_estimate : VisionPositionEstimate
               The vision position estimate
 
@@ -1153,6 +1155,7 @@ class Mocap(AsyncBase):
         """
 
         request = mocap_pb2.SetVisionPositionEstimateRequest()
+        request.drone_id = drone_id
         
         vision_position_estimate.translate_to_rpc(request.vision_position_estimate)
                 
@@ -1163,15 +1166,17 @@ class Mocap(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MocapResult.Result.SUCCESS:
-            raise MocapError(result, "set_vision_position_estimate()", vision_position_estimate)
+            raise MocapError(result, "set_vision_position_estimate()", drone_id, vision_position_estimate)
         
 
-    async def set_attitude_position_mocap(self, attitude_position_mocap):
+    async def set_attitude_position_mocap(self, drone_id, attitude_position_mocap):
         """
          Send motion capture attitude and position.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          attitude_position_mocap : AttitudePositionMocap
               The attitude and position data
 
@@ -1182,6 +1187,7 @@ class Mocap(AsyncBase):
         """
 
         request = mocap_pb2.SetAttitudePositionMocapRequest()
+        request.drone_id = drone_id
         
         attitude_position_mocap.translate_to_rpc(request.attitude_position_mocap)
                 
@@ -1192,15 +1198,17 @@ class Mocap(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MocapResult.Result.SUCCESS:
-            raise MocapError(result, "set_attitude_position_mocap()", attitude_position_mocap)
+            raise MocapError(result, "set_attitude_position_mocap()", drone_id, attitude_position_mocap)
         
 
-    async def set_odometry(self, odometry):
+    async def set_odometry(self, drone_id, odometry):
         """
          Send odometry information with an external interface.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          odometry : Odometry
               The odometry data
 
@@ -1211,6 +1219,7 @@ class Mocap(AsyncBase):
         """
 
         request = mocap_pb2.SetOdometryRequest()
+        request.drone_id = drone_id
         
         odometry.translate_to_rpc(request.odometry)
                 
@@ -1221,5 +1230,5 @@ class Mocap(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MocapResult.Result.SUCCESS:
-            raise MocapError(result, "set_odometry()", odometry)
+            raise MocapError(result, "set_odometry()", drone_id, odometry)
         

@@ -672,7 +672,7 @@ class MissionRaw(AsyncBase):
         return MissionRawResult.translate_from_rpc(response.mission_raw_result)
     
 
-    async def upload_mission(self, mission_items):
+    async def upload_mission(self, drone_id, mission_items):
         """
          Upload a list of raw mission items to the system.
 
@@ -681,6 +681,8 @@ class MissionRaw(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          mission_items : [MissionItem]
               The mission items
 
@@ -691,6 +693,7 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.UploadMissionRequest()
+        request.drone_id = drone_id
         
         rpc_elems_list = []
         for elem in mission_items:
@@ -708,13 +711,17 @@ class MissionRaw(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "upload_mission()", mission_items)
+            raise MissionRawError(result, "upload_mission()", drone_id, mission_items)
         
 
-    async def cancel_mission_upload(self):
+    async def cancel_mission_upload(self, drone_id):
         """
          Cancel an ongoing mission upload.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionRawError
@@ -722,19 +729,24 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.CancelMissionUploadRequest()
+        request.drone_id = drone_id
         response = await self._stub.CancelMissionUpload(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "cancel_mission_upload()")
+            raise MissionRawError(result, "cancel_mission_upload()", drone_id)
         
 
-    async def download_mission(self):
+    async def download_mission(self, drone_id):
         """
          Download a list of raw mission items from the system (asynchronous).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          mission_items : [MissionItem]
@@ -747,13 +759,17 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.DownloadMissionRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.DownloadMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "download_mission()")
+            raise MissionRawError(result, "download_mission()", drone_id)
         
 
         mission_items = []
@@ -763,10 +779,14 @@ class MissionRaw(AsyncBase):
         return mission_items
             
 
-    async def cancel_mission_download(self):
+    async def cancel_mission_download(self, drone_id):
         """
          Cancel an ongoing mission download.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionRawError
@@ -774,21 +794,26 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.CancelMissionDownloadRequest()
+        request.drone_id = drone_id
         response = await self._stub.CancelMissionDownload(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "cancel_mission_download()")
+            raise MissionRawError(result, "cancel_mission_download()", drone_id)
         
 
-    async def start_mission(self):
+    async def start_mission(self, drone_id):
         """
          Start the mission.
 
          A mission must be uploaded to the vehicle before this can be called.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionRawError
@@ -796,16 +821,17 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.StartMissionRequest()
+        request.drone_id = drone_id
         response = await self._stub.StartMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "start_mission()")
+            raise MissionRawError(result, "start_mission()", drone_id)
         
 
-    async def pause_mission(self):
+    async def pause_mission(self, drone_id):
         """
          Pause the mission.
 
@@ -814,6 +840,10 @@ class MissionRaw(AsyncBase):
          A multicopter should just hover at the spot while a fixedwing vehicle should loiter
          around the location where it paused.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionRawError
@@ -821,19 +851,24 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.PauseMissionRequest()
+        request.drone_id = drone_id
         response = await self._stub.PauseMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "pause_mission()")
+            raise MissionRawError(result, "pause_mission()", drone_id)
         
 
-    async def clear_mission(self):
+    async def clear_mission(self, drone_id):
         """
          Clear the mission saved on the vehicle.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          MissionRawError
@@ -841,16 +876,17 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.ClearMissionRequest()
+        request.drone_id = drone_id
         response = await self._stub.ClearMission(request)
 
         
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "clear_mission()")
+            raise MissionRawError(result, "clear_mission()", drone_id)
         
 
-    async def set_current_mission_item(self, index):
+    async def set_current_mission_item(self, drone_id, index):
         """
          Sets the raw mission item index to go to.
 
@@ -859,6 +895,8 @@ class MissionRaw(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          index : int32_t
               Index of the mission item to be set as the next one (0-based)
 
@@ -869,6 +907,7 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.SetCurrentMissionItemRequest()
+        request.drone_id = drone_id
         request.index = index
         response = await self._stub.SetCurrentMissionItem(request)
 
@@ -876,13 +915,17 @@ class MissionRaw(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "set_current_mission_item()", index)
+            raise MissionRawError(result, "set_current_mission_item()", drone_id, index)
         
 
-    async def mission_progress(self):
+    async def mission_progress(self, drone_id):
         """
          Subscribe to mission progress updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          mission_progress : MissionProgress
@@ -892,6 +935,7 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.SubscribeMissionProgressRequest()
+        request.drone_id = drone_id
         mission_progress_stream = self._stub.SubscribeMissionProgress(request)
 
         try:
@@ -903,7 +947,7 @@ class MissionRaw(AsyncBase):
         finally:
             mission_progress_stream.cancel()
 
-    async def mission_changed(self):
+    async def mission_changed(self, drone_id):
         """
          *
          Subscribes to mission changed.
@@ -913,6 +957,10 @@ class MissionRaw(AsyncBase):
 
          @param callback Callback to notify about change.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          mission_changed : bool
@@ -922,6 +970,7 @@ class MissionRaw(AsyncBase):
         """
 
         request = mission_raw_pb2.SubscribeMissionChangedRequest()
+        request.drone_id = drone_id
         mission_changed_stream = self._stub.SubscribeMissionChanged(request)
 
         try:
@@ -933,7 +982,7 @@ class MissionRaw(AsyncBase):
         finally:
             mission_changed_stream.cancel()
 
-    async def import_qgroundcontrol_mission(self, qgc_plan_path):
+    async def import_qgroundcontrol_mission(self, drone_id, qgc_plan_path):
         """
          Import a QGroundControl missions in JSON .plan format.
 
@@ -945,6 +994,8 @@ class MissionRaw(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          qgc_plan_path : std::string
               File path of the QGC plan
 
@@ -962,6 +1013,10 @@ class MissionRaw(AsyncBase):
         request = mission_raw_pb2.ImportQgroundcontrolMissionRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
         request.qgc_plan_path = qgc_plan_path
             
         response = await self._stub.ImportQgroundcontrolMission(request)
@@ -970,7 +1025,7 @@ class MissionRaw(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != MissionRawResult.Result.SUCCESS:
-            raise MissionRawError(result, "import_qgroundcontrol_mission()", qgc_plan_path)
+            raise MissionRawError(result, "import_qgroundcontrol_mission()", drone_id, qgc_plan_path)
         
 
         return MissionImportData.translate_from_rpc(response.mission_import_data)

@@ -448,12 +448,14 @@ class Tune(AsyncBase):
         return TuneResult.translate_from_rpc(response.tune_result)
     
 
-    async def play_tune(self, tune_description):
+    async def play_tune(self, drone_id, tune_description):
         """
          Send a tune to be played by the system.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          tune_description : TuneDescription
               The tune to be played
 
@@ -464,6 +466,7 @@ class Tune(AsyncBase):
         """
 
         request = tune_pb2.PlayTuneRequest()
+        request.drone_id = drone_id
         
         tune_description.translate_to_rpc(request.tune_description)
                 
@@ -474,5 +477,5 @@ class Tune(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TuneResult.Result.SUCCESS:
-            raise TuneError(result, "play_tune()", tune_description)
+            raise TuneError(result, "play_tune()", drone_id, tune_description)
         

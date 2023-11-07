@@ -4,9 +4,8 @@
 """Generated protocol buffer code."""
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
-from google.protobuf import message as _message
-from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
+from google.protobuf.internal import builder as _builder
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -15,166 +14,12 @@ _sym_db = _symbol_database.Default()
 from . import mavsdk_options_pb2 as mavsdk__options__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11param/param.proto\x12\x10mavsdk.rpc.param\x1a\x14mavsdk_options.proto\"\"\n\x12GetParamIntRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"Y\n\x13GetParamIntResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\x12\r\n\x05value\x18\x02 \x01(\x05\"1\n\x12SetParamIntRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\"J\n\x13SetParamIntResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\"$\n\x14GetParamFloatRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"[\n\x15GetParamFloatResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\x12\r\n\x05value\x18\x02 \x01(\x02\"3\n\x14SetParamFloatRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02\"L\n\x15SetParamFloatResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\"%\n\x15GetParamCustomRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"\\\n\x16GetParamCustomResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\x12\r\n\x05value\x18\x02 \x01(\t\"4\n\x15SetParamCustomRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"M\n\x16SetParamCustomResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\"\x15\n\x13GetAllParamsRequest\"C\n\x14GetAllParamsResponse\x12+\n\x06params\x18\x01 \x01(\x0b\x32\x1b.mavsdk.rpc.param.AllParams\"\'\n\x08IntParam\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\")\n\nFloatParam\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02\"*\n\x0b\x43ustomParam\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x01\n\tAllParams\x12.\n\nint_params\x18\x01 \x03(\x0b\x32\x1a.mavsdk.rpc.param.IntParam\x12\x32\n\x0c\x66loat_params\x18\x02 \x03(\x0b\x32\x1c.mavsdk.rpc.param.FloatParam\x12\x34\n\rcustom_params\x18\x03 \x03(\x0b\x32\x1d.mavsdk.rpc.param.CustomParam\"\xa9\x02\n\x0bParamResult\x12\x34\n\x06result\x18\x01 \x01(\x0e\x32$.mavsdk.rpc.param.ParamResult.Result\x12\x12\n\nresult_str\x18\x02 \x01(\t\"\xcf\x01\n\x06Result\x12\x12\n\x0eRESULT_UNKNOWN\x10\x00\x12\x12\n\x0eRESULT_SUCCESS\x10\x01\x12\x12\n\x0eRESULT_TIMEOUT\x10\x02\x12\x1b\n\x17RESULT_CONNECTION_ERROR\x10\x03\x12\x15\n\x11RESULT_WRONG_TYPE\x10\x04\x12\x1e\n\x1aRESULT_PARAM_NAME_TOO_LONG\x10\x05\x12\x14\n\x10RESULT_NO_SYSTEM\x10\x06\x12\x1f\n\x1bRESULT_PARAM_VALUE_TOO_LONG\x10\x07\x32\xdd\x05\n\x0cParamService\x12`\n\x0bGetParamInt\x12$.mavsdk.rpc.param.GetParamIntRequest\x1a%.mavsdk.rpc.param.GetParamIntResponse\"\x04\x80\xb5\x18\x01\x12`\n\x0bSetParamInt\x12$.mavsdk.rpc.param.SetParamIntRequest\x1a%.mavsdk.rpc.param.SetParamIntResponse\"\x04\x80\xb5\x18\x01\x12\x66\n\rGetParamFloat\x12&.mavsdk.rpc.param.GetParamFloatRequest\x1a\'.mavsdk.rpc.param.GetParamFloatResponse\"\x04\x80\xb5\x18\x01\x12\x66\n\rSetParamFloat\x12&.mavsdk.rpc.param.SetParamFloatRequest\x1a\'.mavsdk.rpc.param.SetParamFloatResponse\"\x04\x80\xb5\x18\x01\x12i\n\x0eGetParamCustom\x12\'.mavsdk.rpc.param.GetParamCustomRequest\x1a(.mavsdk.rpc.param.GetParamCustomResponse\"\x04\x80\xb5\x18\x01\x12i\n\x0eSetParamCustom\x12\'.mavsdk.rpc.param.SetParamCustomRequest\x1a(.mavsdk.rpc.param.SetParamCustomResponse\"\x04\x80\xb5\x18\x01\x12\x63\n\x0cGetAllParams\x12%.mavsdk.rpc.param.GetAllParamsRequest\x1a&.mavsdk.rpc.param.GetAllParamsResponse\"\x04\x80\xb5\x18\x01\x42\x1d\n\x0fio.mavsdk.paramB\nParamProtob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11param/param.proto\x12\x10mavsdk.rpc.param\x1a\x14mavsdk_options.proto\"4\n\x12GetParamIntRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"Y\n\x13GetParamIntResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\x12\r\n\x05value\x18\x02 \x01(\x05\"C\n\x12SetParamIntRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x05\"J\n\x13SetParamIntResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\"6\n\x14GetParamFloatRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"[\n\x15GetParamFloatResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\x12\r\n\x05value\x18\x02 \x01(\x02\"E\n\x14SetParamFloatRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\"L\n\x15SetParamFloatResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\"7\n\x15GetParamCustomRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"\\\n\x16GetParamCustomResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\x12\r\n\x05value\x18\x02 \x01(\t\"F\n\x15SetParamCustomRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\"M\n\x16SetParamCustomResponse\x12\x33\n\x0cparam_result\x18\x01 \x01(\x0b\x32\x1d.mavsdk.rpc.param.ParamResult\"\'\n\x13GetAllParamsRequest\x12\x10\n\x08\x64rone_id\x18\x01 \x01(\x05\"C\n\x14GetAllParamsResponse\x12+\n\x06params\x18\x01 \x01(\x0b\x32\x1b.mavsdk.rpc.param.AllParams\"\'\n\x08IntParam\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\")\n\nFloatParam\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02\"*\n\x0b\x43ustomParam\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\xa5\x01\n\tAllParams\x12.\n\nint_params\x18\x01 \x03(\x0b\x32\x1a.mavsdk.rpc.param.IntParam\x12\x32\n\x0c\x66loat_params\x18\x02 \x03(\x0b\x32\x1c.mavsdk.rpc.param.FloatParam\x12\x34\n\rcustom_params\x18\x03 \x03(\x0b\x32\x1d.mavsdk.rpc.param.CustomParam\"\xa9\x02\n\x0bParamResult\x12\x34\n\x06result\x18\x01 \x01(\x0e\x32$.mavsdk.rpc.param.ParamResult.Result\x12\x12\n\nresult_str\x18\x02 \x01(\t\"\xcf\x01\n\x06Result\x12\x12\n\x0eRESULT_UNKNOWN\x10\x00\x12\x12\n\x0eRESULT_SUCCESS\x10\x01\x12\x12\n\x0eRESULT_TIMEOUT\x10\x02\x12\x1b\n\x17RESULT_CONNECTION_ERROR\x10\x03\x12\x15\n\x11RESULT_WRONG_TYPE\x10\x04\x12\x1e\n\x1aRESULT_PARAM_NAME_TOO_LONG\x10\x05\x12\x14\n\x10RESULT_NO_SYSTEM\x10\x06\x12\x1f\n\x1bRESULT_PARAM_VALUE_TOO_LONG\x10\x07\x32\xdd\x05\n\x0cParamService\x12`\n\x0bGetParamInt\x12$.mavsdk.rpc.param.GetParamIntRequest\x1a%.mavsdk.rpc.param.GetParamIntResponse\"\x04\x80\xb5\x18\x01\x12`\n\x0bSetParamInt\x12$.mavsdk.rpc.param.SetParamIntRequest\x1a%.mavsdk.rpc.param.SetParamIntResponse\"\x04\x80\xb5\x18\x01\x12\x66\n\rGetParamFloat\x12&.mavsdk.rpc.param.GetParamFloatRequest\x1a\'.mavsdk.rpc.param.GetParamFloatResponse\"\x04\x80\xb5\x18\x01\x12\x66\n\rSetParamFloat\x12&.mavsdk.rpc.param.SetParamFloatRequest\x1a\'.mavsdk.rpc.param.SetParamFloatResponse\"\x04\x80\xb5\x18\x01\x12i\n\x0eGetParamCustom\x12\'.mavsdk.rpc.param.GetParamCustomRequest\x1a(.mavsdk.rpc.param.GetParamCustomResponse\"\x04\x80\xb5\x18\x01\x12i\n\x0eSetParamCustom\x12\'.mavsdk.rpc.param.SetParamCustomRequest\x1a(.mavsdk.rpc.param.SetParamCustomResponse\"\x04\x80\xb5\x18\x01\x12\x63\n\x0cGetAllParams\x12%.mavsdk.rpc.param.GetAllParamsRequest\x1a&.mavsdk.rpc.param.GetAllParamsResponse\"\x04\x80\xb5\x18\x01\x42\x1d\n\x0fio.mavsdk.paramB\nParamProtob\x06proto3')
 
-
-
-_GETPARAMINTREQUEST = DESCRIPTOR.message_types_by_name['GetParamIntRequest']
-_GETPARAMINTRESPONSE = DESCRIPTOR.message_types_by_name['GetParamIntResponse']
-_SETPARAMINTREQUEST = DESCRIPTOR.message_types_by_name['SetParamIntRequest']
-_SETPARAMINTRESPONSE = DESCRIPTOR.message_types_by_name['SetParamIntResponse']
-_GETPARAMFLOATREQUEST = DESCRIPTOR.message_types_by_name['GetParamFloatRequest']
-_GETPARAMFLOATRESPONSE = DESCRIPTOR.message_types_by_name['GetParamFloatResponse']
-_SETPARAMFLOATREQUEST = DESCRIPTOR.message_types_by_name['SetParamFloatRequest']
-_SETPARAMFLOATRESPONSE = DESCRIPTOR.message_types_by_name['SetParamFloatResponse']
-_GETPARAMCUSTOMREQUEST = DESCRIPTOR.message_types_by_name['GetParamCustomRequest']
-_GETPARAMCUSTOMRESPONSE = DESCRIPTOR.message_types_by_name['GetParamCustomResponse']
-_SETPARAMCUSTOMREQUEST = DESCRIPTOR.message_types_by_name['SetParamCustomRequest']
-_SETPARAMCUSTOMRESPONSE = DESCRIPTOR.message_types_by_name['SetParamCustomResponse']
-_GETALLPARAMSREQUEST = DESCRIPTOR.message_types_by_name['GetAllParamsRequest']
-_GETALLPARAMSRESPONSE = DESCRIPTOR.message_types_by_name['GetAllParamsResponse']
-_INTPARAM = DESCRIPTOR.message_types_by_name['IntParam']
-_FLOATPARAM = DESCRIPTOR.message_types_by_name['FloatParam']
-_CUSTOMPARAM = DESCRIPTOR.message_types_by_name['CustomParam']
-_ALLPARAMS = DESCRIPTOR.message_types_by_name['AllParams']
-_PARAMRESULT = DESCRIPTOR.message_types_by_name['ParamResult']
-_PARAMRESULT_RESULT = _PARAMRESULT.enum_types_by_name['Result']
-GetParamIntRequest = _reflection.GeneratedProtocolMessageType('GetParamIntRequest', (_message.Message,), {
-  'DESCRIPTOR' : _GETPARAMINTREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetParamIntRequest)
-  })
-_sym_db.RegisterMessage(GetParamIntRequest)
-
-GetParamIntResponse = _reflection.GeneratedProtocolMessageType('GetParamIntResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETPARAMINTRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetParamIntResponse)
-  })
-_sym_db.RegisterMessage(GetParamIntResponse)
-
-SetParamIntRequest = _reflection.GeneratedProtocolMessageType('SetParamIntRequest', (_message.Message,), {
-  'DESCRIPTOR' : _SETPARAMINTREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.SetParamIntRequest)
-  })
-_sym_db.RegisterMessage(SetParamIntRequest)
-
-SetParamIntResponse = _reflection.GeneratedProtocolMessageType('SetParamIntResponse', (_message.Message,), {
-  'DESCRIPTOR' : _SETPARAMINTRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.SetParamIntResponse)
-  })
-_sym_db.RegisterMessage(SetParamIntResponse)
-
-GetParamFloatRequest = _reflection.GeneratedProtocolMessageType('GetParamFloatRequest', (_message.Message,), {
-  'DESCRIPTOR' : _GETPARAMFLOATREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetParamFloatRequest)
-  })
-_sym_db.RegisterMessage(GetParamFloatRequest)
-
-GetParamFloatResponse = _reflection.GeneratedProtocolMessageType('GetParamFloatResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETPARAMFLOATRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetParamFloatResponse)
-  })
-_sym_db.RegisterMessage(GetParamFloatResponse)
-
-SetParamFloatRequest = _reflection.GeneratedProtocolMessageType('SetParamFloatRequest', (_message.Message,), {
-  'DESCRIPTOR' : _SETPARAMFLOATREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.SetParamFloatRequest)
-  })
-_sym_db.RegisterMessage(SetParamFloatRequest)
-
-SetParamFloatResponse = _reflection.GeneratedProtocolMessageType('SetParamFloatResponse', (_message.Message,), {
-  'DESCRIPTOR' : _SETPARAMFLOATRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.SetParamFloatResponse)
-  })
-_sym_db.RegisterMessage(SetParamFloatResponse)
-
-GetParamCustomRequest = _reflection.GeneratedProtocolMessageType('GetParamCustomRequest', (_message.Message,), {
-  'DESCRIPTOR' : _GETPARAMCUSTOMREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetParamCustomRequest)
-  })
-_sym_db.RegisterMessage(GetParamCustomRequest)
-
-GetParamCustomResponse = _reflection.GeneratedProtocolMessageType('GetParamCustomResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETPARAMCUSTOMRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetParamCustomResponse)
-  })
-_sym_db.RegisterMessage(GetParamCustomResponse)
-
-SetParamCustomRequest = _reflection.GeneratedProtocolMessageType('SetParamCustomRequest', (_message.Message,), {
-  'DESCRIPTOR' : _SETPARAMCUSTOMREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.SetParamCustomRequest)
-  })
-_sym_db.RegisterMessage(SetParamCustomRequest)
-
-SetParamCustomResponse = _reflection.GeneratedProtocolMessageType('SetParamCustomResponse', (_message.Message,), {
-  'DESCRIPTOR' : _SETPARAMCUSTOMRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.SetParamCustomResponse)
-  })
-_sym_db.RegisterMessage(SetParamCustomResponse)
-
-GetAllParamsRequest = _reflection.GeneratedProtocolMessageType('GetAllParamsRequest', (_message.Message,), {
-  'DESCRIPTOR' : _GETALLPARAMSREQUEST,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetAllParamsRequest)
-  })
-_sym_db.RegisterMessage(GetAllParamsRequest)
-
-GetAllParamsResponse = _reflection.GeneratedProtocolMessageType('GetAllParamsResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETALLPARAMSRESPONSE,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.GetAllParamsResponse)
-  })
-_sym_db.RegisterMessage(GetAllParamsResponse)
-
-IntParam = _reflection.GeneratedProtocolMessageType('IntParam', (_message.Message,), {
-  'DESCRIPTOR' : _INTPARAM,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.IntParam)
-  })
-_sym_db.RegisterMessage(IntParam)
-
-FloatParam = _reflection.GeneratedProtocolMessageType('FloatParam', (_message.Message,), {
-  'DESCRIPTOR' : _FLOATPARAM,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.FloatParam)
-  })
-_sym_db.RegisterMessage(FloatParam)
-
-CustomParam = _reflection.GeneratedProtocolMessageType('CustomParam', (_message.Message,), {
-  'DESCRIPTOR' : _CUSTOMPARAM,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.CustomParam)
-  })
-_sym_db.RegisterMessage(CustomParam)
-
-AllParams = _reflection.GeneratedProtocolMessageType('AllParams', (_message.Message,), {
-  'DESCRIPTOR' : _ALLPARAMS,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.AllParams)
-  })
-_sym_db.RegisterMessage(AllParams)
-
-ParamResult = _reflection.GeneratedProtocolMessageType('ParamResult', (_message.Message,), {
-  'DESCRIPTOR' : _PARAMRESULT,
-  '__module__' : 'param.param_pb2'
-  # @@protoc_insertion_point(class_scope:mavsdk.rpc.param.ParamResult)
-  })
-_sym_db.RegisterMessage(ParamResult)
-
-_PARAMSERVICE = DESCRIPTOR.services_by_name['ParamService']
+_globals = globals()
+_builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'param.param_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n\017io.mavsdk.paramB\nParamProto'
   _PARAMSERVICE.methods_by_name['GetParamInt']._options = None
@@ -191,46 +36,46 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _PARAMSERVICE.methods_by_name['SetParamCustom']._serialized_options = b'\200\265\030\001'
   _PARAMSERVICE.methods_by_name['GetAllParams']._options = None
   _PARAMSERVICE.methods_by_name['GetAllParams']._serialized_options = b'\200\265\030\001'
-  _GETPARAMINTREQUEST._serialized_start=61
-  _GETPARAMINTREQUEST._serialized_end=95
-  _GETPARAMINTRESPONSE._serialized_start=97
-  _GETPARAMINTRESPONSE._serialized_end=186
-  _SETPARAMINTREQUEST._serialized_start=188
-  _SETPARAMINTREQUEST._serialized_end=237
-  _SETPARAMINTRESPONSE._serialized_start=239
-  _SETPARAMINTRESPONSE._serialized_end=313
-  _GETPARAMFLOATREQUEST._serialized_start=315
-  _GETPARAMFLOATREQUEST._serialized_end=351
-  _GETPARAMFLOATRESPONSE._serialized_start=353
-  _GETPARAMFLOATRESPONSE._serialized_end=444
-  _SETPARAMFLOATREQUEST._serialized_start=446
-  _SETPARAMFLOATREQUEST._serialized_end=497
-  _SETPARAMFLOATRESPONSE._serialized_start=499
-  _SETPARAMFLOATRESPONSE._serialized_end=575
-  _GETPARAMCUSTOMREQUEST._serialized_start=577
-  _GETPARAMCUSTOMREQUEST._serialized_end=614
-  _GETPARAMCUSTOMRESPONSE._serialized_start=616
-  _GETPARAMCUSTOMRESPONSE._serialized_end=708
-  _SETPARAMCUSTOMREQUEST._serialized_start=710
-  _SETPARAMCUSTOMREQUEST._serialized_end=762
-  _SETPARAMCUSTOMRESPONSE._serialized_start=764
-  _SETPARAMCUSTOMRESPONSE._serialized_end=841
-  _GETALLPARAMSREQUEST._serialized_start=843
-  _GETALLPARAMSREQUEST._serialized_end=864
-  _GETALLPARAMSRESPONSE._serialized_start=866
-  _GETALLPARAMSRESPONSE._serialized_end=933
-  _INTPARAM._serialized_start=935
-  _INTPARAM._serialized_end=974
-  _FLOATPARAM._serialized_start=976
-  _FLOATPARAM._serialized_end=1017
-  _CUSTOMPARAM._serialized_start=1019
-  _CUSTOMPARAM._serialized_end=1061
-  _ALLPARAMS._serialized_start=1064
-  _ALLPARAMS._serialized_end=1229
-  _PARAMRESULT._serialized_start=1232
-  _PARAMRESULT._serialized_end=1529
-  _PARAMRESULT_RESULT._serialized_start=1322
-  _PARAMRESULT_RESULT._serialized_end=1529
-  _PARAMSERVICE._serialized_start=1532
-  _PARAMSERVICE._serialized_end=2265
+  _globals['_GETPARAMINTREQUEST']._serialized_start=61
+  _globals['_GETPARAMINTREQUEST']._serialized_end=113
+  _globals['_GETPARAMINTRESPONSE']._serialized_start=115
+  _globals['_GETPARAMINTRESPONSE']._serialized_end=204
+  _globals['_SETPARAMINTREQUEST']._serialized_start=206
+  _globals['_SETPARAMINTREQUEST']._serialized_end=273
+  _globals['_SETPARAMINTRESPONSE']._serialized_start=275
+  _globals['_SETPARAMINTRESPONSE']._serialized_end=349
+  _globals['_GETPARAMFLOATREQUEST']._serialized_start=351
+  _globals['_GETPARAMFLOATREQUEST']._serialized_end=405
+  _globals['_GETPARAMFLOATRESPONSE']._serialized_start=407
+  _globals['_GETPARAMFLOATRESPONSE']._serialized_end=498
+  _globals['_SETPARAMFLOATREQUEST']._serialized_start=500
+  _globals['_SETPARAMFLOATREQUEST']._serialized_end=569
+  _globals['_SETPARAMFLOATRESPONSE']._serialized_start=571
+  _globals['_SETPARAMFLOATRESPONSE']._serialized_end=647
+  _globals['_GETPARAMCUSTOMREQUEST']._serialized_start=649
+  _globals['_GETPARAMCUSTOMREQUEST']._serialized_end=704
+  _globals['_GETPARAMCUSTOMRESPONSE']._serialized_start=706
+  _globals['_GETPARAMCUSTOMRESPONSE']._serialized_end=798
+  _globals['_SETPARAMCUSTOMREQUEST']._serialized_start=800
+  _globals['_SETPARAMCUSTOMREQUEST']._serialized_end=870
+  _globals['_SETPARAMCUSTOMRESPONSE']._serialized_start=872
+  _globals['_SETPARAMCUSTOMRESPONSE']._serialized_end=949
+  _globals['_GETALLPARAMSREQUEST']._serialized_start=951
+  _globals['_GETALLPARAMSREQUEST']._serialized_end=990
+  _globals['_GETALLPARAMSRESPONSE']._serialized_start=992
+  _globals['_GETALLPARAMSRESPONSE']._serialized_end=1059
+  _globals['_INTPARAM']._serialized_start=1061
+  _globals['_INTPARAM']._serialized_end=1100
+  _globals['_FLOATPARAM']._serialized_start=1102
+  _globals['_FLOATPARAM']._serialized_end=1143
+  _globals['_CUSTOMPARAM']._serialized_start=1145
+  _globals['_CUSTOMPARAM']._serialized_end=1187
+  _globals['_ALLPARAMS']._serialized_start=1190
+  _globals['_ALLPARAMS']._serialized_end=1355
+  _globals['_PARAMRESULT']._serialized_start=1358
+  _globals['_PARAMRESULT']._serialized_end=1655
+  _globals['_PARAMRESULT_RESULT']._serialized_start=1448
+  _globals['_PARAMRESULT_RESULT']._serialized_end=1655
+  _globals['_PARAMSERVICE']._serialized_start=1658
+  _globals['_PARAMSERVICE']._serialized_end=2391
 # @@protoc_insertion_point(module_scope)

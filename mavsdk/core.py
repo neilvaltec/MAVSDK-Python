@@ -82,10 +82,14 @@ class Core(AsyncBase):
 
     
 
-    async def connection_state(self):
+    async def connection_state(self, drone_id):
         """
          Subscribe to 'connection state' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          connection_state : ConnectionState
@@ -95,6 +99,7 @@ class Core(AsyncBase):
         """
 
         request = core_pb2.SubscribeConnectionStateRequest()
+        request.drone_id = drone_id
         connection_state_stream = self._stub.SubscribeConnectionState(request)
 
         try:
@@ -106,7 +111,7 @@ class Core(AsyncBase):
         finally:
             connection_state_stream.cancel()
 
-    async def set_mavlink_timeout(self, timeout_s):
+    async def set_mavlink_timeout(self, drone_id, timeout_s):
         """
          Set timeout of MAVLink transfers.
 
@@ -117,6 +122,8 @@ class Core(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          timeout_s : double
               Timeout in seconds
 
@@ -124,6 +131,7 @@ class Core(AsyncBase):
         """
 
         request = core_pb2.SetMavlinkTimeoutRequest()
+        request.drone_id = drone_id
         request.timeout_s = timeout_s
         response = await self._stub.SetMavlinkTimeout(request)
 

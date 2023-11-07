@@ -637,10 +637,14 @@ class Info(AsyncBase):
         return InfoResult.translate_from_rpc(response.info_result)
     
 
-    async def get_flight_information(self):
+    async def get_flight_information(self, drone_id):
         """
          Get flight information of the system.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          flight_info : FlightInfo
@@ -653,22 +657,30 @@ class Info(AsyncBase):
         """
 
         request = info_pb2.GetFlightInformationRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetFlightInformation(request)
 
         
         result = self._extract_result(response)
 
         if result.result != InfoResult.Result.SUCCESS:
-            raise InfoError(result, "get_flight_information()")
+            raise InfoError(result, "get_flight_information()", drone_id)
         
 
         return FlightInfo.translate_from_rpc(response.flight_info)
             
 
-    async def get_identification(self):
+    async def get_identification(self, drone_id):
         """
          Get the identification of the system.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          identification : Identification
@@ -681,22 +693,30 @@ class Info(AsyncBase):
         """
 
         request = info_pb2.GetIdentificationRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetIdentification(request)
 
         
         result = self._extract_result(response)
 
         if result.result != InfoResult.Result.SUCCESS:
-            raise InfoError(result, "get_identification()")
+            raise InfoError(result, "get_identification()", drone_id)
         
 
         return Identification.translate_from_rpc(response.identification)
             
 
-    async def get_product(self):
+    async def get_product(self, drone_id):
         """
          Get product information of the system.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          product : Product
@@ -709,22 +729,30 @@ class Info(AsyncBase):
         """
 
         request = info_pb2.GetProductRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetProduct(request)
 
         
         result = self._extract_result(response)
 
         if result.result != InfoResult.Result.SUCCESS:
-            raise InfoError(result, "get_product()")
+            raise InfoError(result, "get_product()", drone_id)
         
 
         return Product.translate_from_rpc(response.product)
             
 
-    async def get_version(self):
+    async def get_version(self, drone_id):
         """
          Get the version information of the system.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          version : Version
@@ -737,22 +765,30 @@ class Info(AsyncBase):
         """
 
         request = info_pb2.GetVersionRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetVersion(request)
 
         
         result = self._extract_result(response)
 
         if result.result != InfoResult.Result.SUCCESS:
-            raise InfoError(result, "get_version()")
+            raise InfoError(result, "get_version()", drone_id)
         
 
         return Version.translate_from_rpc(response.version)
             
 
-    async def get_speed_factor(self):
+    async def get_speed_factor(self, drone_id):
         """
          Get the speed factor of a simulation (with lockstep a simulation can run faster or slower than realtime).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          speed_factor : double
@@ -765,13 +801,17 @@ class Info(AsyncBase):
         """
 
         request = info_pb2.GetSpeedFactorRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetSpeedFactor(request)
 
         
         result = self._extract_result(response)
 
         if result.result != InfoResult.Result.SUCCESS:
-            raise InfoError(result, "get_speed_factor()")
+            raise InfoError(result, "get_speed_factor()", drone_id)
         
 
         return response.speed_factor

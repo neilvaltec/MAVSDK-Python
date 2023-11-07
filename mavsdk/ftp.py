@@ -311,10 +311,14 @@ class Ftp(AsyncBase):
         return FtpResult.translate_from_rpc(response.ftp_result)
     
 
-    async def reset(self):
+    async def reset(self, drone_id):
         """
          Resets FTP server in case there are stale open sessions.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          FtpError
@@ -322,21 +326,24 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.ResetRequest()
+        request.drone_id = drone_id
         response = await self._stub.Reset(request)
 
         
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "reset()")
+            raise FtpError(result, "reset()", drone_id)
         
 
-    async def download(self, remote_file_path, local_dir):
+    async def download(self, drone_id, remote_file_path, local_dir):
         """
          Downloads a file to local directory.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          remote_file_path : std::string
               The path of the remote file to download.
 
@@ -355,6 +362,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.SubscribeDownloadRequest()
+        request.drone_id = drone_id
         request.remote_file_path = remote_file_path
         request.local_dir = local_dir
         download_stream = self._stub.SubscribeDownload(request)
@@ -369,7 +377,7 @@ class Ftp(AsyncBase):
                     success_codes.append(FtpResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise FtpError(result, "download()", remote_file_path, local_dir)
+                    raise FtpError(result, "download()", drone_id, remote_file_path, local_dir)
 
                 if result.result == FtpResult.Result.SUCCESS:
                     download_stream.cancel();
@@ -381,12 +389,14 @@ class Ftp(AsyncBase):
         finally:
             download_stream.cancel()
 
-    async def upload(self, local_file_path, remote_dir):
+    async def upload(self, drone_id, local_file_path, remote_dir):
         """
          Uploads local file to remote directory.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          local_file_path : std::string
               The local file path to upload.
 
@@ -405,6 +415,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.SubscribeUploadRequest()
+        request.drone_id = drone_id
         request.local_file_path = local_file_path
         request.remote_dir = remote_dir
         upload_stream = self._stub.SubscribeUpload(request)
@@ -419,7 +430,7 @@ class Ftp(AsyncBase):
                     success_codes.append(FtpResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise FtpError(result, "upload()", local_file_path, remote_dir)
+                    raise FtpError(result, "upload()", drone_id, local_file_path, remote_dir)
 
                 if result.result == FtpResult.Result.SUCCESS:
                     upload_stream.cancel();
@@ -431,12 +442,14 @@ class Ftp(AsyncBase):
         finally:
             upload_stream.cancel()
 
-    async def list_directory(self, remote_dir):
+    async def list_directory(self, drone_id, remote_dir):
         """
          Lists items from a remote directory.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          remote_dir : std::string
               The remote directory to list the contents for.
 
@@ -454,6 +467,10 @@ class Ftp(AsyncBase):
         request = ftp_pb2.ListDirectoryRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
         request.remote_dir = remote_dir
             
         response = await self._stub.ListDirectory(request)
@@ -462,18 +479,20 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "list_directory()", remote_dir)
+            raise FtpError(result, "list_directory()", drone_id, remote_dir)
         
 
         return response.paths
         
 
-    async def create_directory(self, remote_dir):
+    async def create_directory(self, drone_id, remote_dir):
         """
          Creates a remote directory.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          remote_dir : std::string
               The remote directory to create.
 
@@ -484,6 +503,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.CreateDirectoryRequest()
+        request.drone_id = drone_id
         request.remote_dir = remote_dir
         response = await self._stub.CreateDirectory(request)
 
@@ -491,15 +511,17 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "create_directory()", remote_dir)
+            raise FtpError(result, "create_directory()", drone_id, remote_dir)
         
 
-    async def remove_directory(self, remote_dir):
+    async def remove_directory(self, drone_id, remote_dir):
         """
          Removes a remote directory.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          remote_dir : std::string
               The remote directory to remove.
 
@@ -510,6 +532,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.RemoveDirectoryRequest()
+        request.drone_id = drone_id
         request.remote_dir = remote_dir
         response = await self._stub.RemoveDirectory(request)
 
@@ -517,15 +540,17 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "remove_directory()", remote_dir)
+            raise FtpError(result, "remove_directory()", drone_id, remote_dir)
         
 
-    async def remove_file(self, remote_file_path):
+    async def remove_file(self, drone_id, remote_file_path):
         """
          Removes a remote file.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          remote_file_path : std::string
               The path of the remote file to remove.
 
@@ -536,6 +561,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.RemoveFileRequest()
+        request.drone_id = drone_id
         request.remote_file_path = remote_file_path
         response = await self._stub.RemoveFile(request)
 
@@ -543,15 +569,17 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "remove_file()", remote_file_path)
+            raise FtpError(result, "remove_file()", drone_id, remote_file_path)
         
 
-    async def rename(self, remote_from_path, remote_to_path):
+    async def rename(self, drone_id, remote_from_path, remote_to_path):
         """
          Renames a remote file or remote directory.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          remote_from_path : std::string
               The remote source path.
 
@@ -565,6 +593,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.RenameRequest()
+        request.drone_id = drone_id
         request.remote_from_path = remote_from_path
         request.remote_to_path = remote_to_path
         response = await self._stub.Rename(request)
@@ -573,15 +602,17 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "rename()", remote_from_path, remote_to_path)
+            raise FtpError(result, "rename()", drone_id, remote_from_path, remote_to_path)
         
 
-    async def are_files_identical(self, local_file_path, remote_file_path):
+    async def are_files_identical(self, drone_id, local_file_path, remote_file_path):
         """
          Compares a local file to a remote file using a CRC32 checksum.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          local_file_path : std::string
               The path of the local file.
 
@@ -602,6 +633,10 @@ class Ftp(AsyncBase):
         request = ftp_pb2.AreFilesIdenticalRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
         request.local_file_path = local_file_path
             
         
@@ -614,18 +649,20 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "are_files_identical()", local_file_path, remote_file_path)
+            raise FtpError(result, "are_files_identical()", drone_id, local_file_path, remote_file_path)
         
 
         return response.are_identical
         
 
-    async def set_root_directory(self, root_dir):
+    async def set_root_directory(self, drone_id, root_dir):
         """
          Set root directory for MAVLink FTP server.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          root_dir : std::string
               The root directory to set.
 
@@ -636,6 +673,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.SetRootDirectoryRequest()
+        request.drone_id = drone_id
         request.root_dir = root_dir
         response = await self._stub.SetRootDirectory(request)
 
@@ -643,15 +681,17 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "set_root_directory()", root_dir)
+            raise FtpError(result, "set_root_directory()", drone_id, root_dir)
         
 
-    async def set_target_compid(self, compid):
+    async def set_target_compid(self, drone_id, compid):
         """
          Set target component ID. By default it is the autopilot.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          compid : uint32_t
               The component ID to set.
 
@@ -662,6 +702,7 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.SetTargetCompidRequest()
+        request.drone_id = drone_id
         request.compid = compid
         response = await self._stub.SetTargetCompid(request)
 
@@ -669,13 +710,17 @@ class Ftp(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FtpResult.Result.SUCCESS:
-            raise FtpError(result, "set_target_compid()", compid)
+            raise FtpError(result, "set_target_compid()", drone_id, compid)
         
 
-    async def get_our_compid(self):
+    async def get_our_compid(self, drone_id):
         """
          Get our own component ID.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          compid : uint32_t
@@ -685,6 +730,10 @@ class Ftp(AsyncBase):
         """
 
         request = ftp_pb2.GetOurCompidRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetOurCompid(request)
 
         
