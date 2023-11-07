@@ -257,12 +257,14 @@ class ServerUtility(AsyncBase):
         return ServerUtilityResult.translate_from_rpc(response.server_utility_result)
     
 
-    async def send_status_text(self, type, text):
+    async def send_status_text(self, drone_id, type, text):
         """
          Sends a statustext.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          type : StatusTextType
               The text to send
 
@@ -276,6 +278,7 @@ class ServerUtility(AsyncBase):
         """
 
         request = server_utility_pb2.SendStatusTextRequest()
+        request.drone_id = drone_id
         
         request.type = type.translate_to_rpc()
                 
@@ -287,5 +290,5 @@ class ServerUtility(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ServerUtilityResult.Result.SUCCESS:
-            raise ServerUtilityError(result, "send_status_text()", type, text)
+            raise ServerUtilityError(result, "send_status_text()", drone_id, type, text)
         

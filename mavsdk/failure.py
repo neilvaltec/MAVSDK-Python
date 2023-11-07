@@ -421,12 +421,14 @@ class Failure(AsyncBase):
         return FailureResult.translate_from_rpc(response.failure_result)
     
 
-    async def inject(self, failure_unit, failure_type, instance):
+    async def inject(self, drone_id, failure_unit, failure_type, instance):
         """
          Injects a failure.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          failure_unit : FailureUnit
               The failure unit to send
 
@@ -443,6 +445,7 @@ class Failure(AsyncBase):
         """
 
         request = failure_pb2.InjectRequest()
+        request.drone_id = drone_id
         
         request.failure_unit = failure_unit.translate_to_rpc()
                 
@@ -458,5 +461,5 @@ class Failure(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FailureResult.Result.SUCCESS:
-            raise FailureError(result, "inject()", failure_unit, failure_type, instance)
+            raise FailureError(result, "inject()", drone_id, failure_unit, failure_type, instance)
         

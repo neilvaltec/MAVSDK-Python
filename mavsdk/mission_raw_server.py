@@ -627,10 +627,14 @@ class MissionRawServer(AsyncBase):
         return MissionRawServerResult.translate_from_rpc(response.mission_raw_server_result)
     
 
-    async def incoming_mission(self):
+    async def incoming_mission(self, drone_id):
         """
          Subscribe to when a new mission is uploaded (asynchronous).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          mission_plan : MissionPlan
@@ -643,6 +647,7 @@ class MissionRawServer(AsyncBase):
         """
 
         request = mission_raw_server_pb2.SubscribeIncomingMissionRequest()
+        request.drone_id = drone_id
         incoming_mission_stream = self._stub.SubscribeIncomingMission(request)
 
         try:
@@ -655,7 +660,7 @@ class MissionRawServer(AsyncBase):
                     success_codes.append(MissionRawServerResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise MissionRawServerError(result, "incoming_mission()")
+                    raise MissionRawServerError(result, "incoming_mission()", drone_id)
 
                 if result.result == MissionRawServerResult.Result.SUCCESS:
                     incoming_mission_stream.cancel();
@@ -667,10 +672,14 @@ class MissionRawServer(AsyncBase):
         finally:
             incoming_mission_stream.cancel()
 
-    async def current_item_changed(self):
+    async def current_item_changed(self, drone_id):
         """
          Subscribe to when a new current item is set
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          mission_item : MissionItem
@@ -679,6 +688,7 @@ class MissionRawServer(AsyncBase):
         """
 
         request = mission_raw_server_pb2.SubscribeCurrentItemChangedRequest()
+        request.drone_id = drone_id
         current_item_changed_stream = self._stub.SubscribeCurrentItemChanged(request)
 
         try:
@@ -690,22 +700,31 @@ class MissionRawServer(AsyncBase):
         finally:
             current_item_changed_stream.cancel()
 
-    async def set_current_item_complete(self):
+    async def set_current_item_complete(self, drone_id):
         """
          Set Current item as completed
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          
         """
 
         request = mission_raw_server_pb2.SetCurrentItemCompleteRequest()
+        request.drone_id = drone_id
         response = await self._stub.SetCurrentItemComplete(request)
 
         
 
-    async def clear_all(self):
+    async def clear_all(self, drone_id):
         """
          Subscribe when a MISSION_CLEAR_ALL is received
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          clear_type : uint32_t
@@ -714,6 +733,7 @@ class MissionRawServer(AsyncBase):
         """
 
         request = mission_raw_server_pb2.SubscribeClearAllRequest()
+        request.drone_id = drone_id
         clear_all_stream = self._stub.SubscribeClearAll(request)
 
         try:

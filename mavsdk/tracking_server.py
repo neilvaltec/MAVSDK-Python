@@ -421,12 +421,14 @@ class TrackingServer(AsyncBase):
         return TrackingServerResult.translate_from_rpc(response.tracking_server_result)
     
 
-    async def set_tracking_point_status(self, tracked_point):
+    async def set_tracking_point_status(self, drone_id, tracked_point):
         """
          Set/update the current point tracking status.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          tracked_point : TrackPoint
               The tracked point
 
@@ -434,6 +436,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.SetTrackingPointStatusRequest()
+        request.drone_id = drone_id
         
         tracked_point.translate_to_rpc(request.tracked_point)
                 
@@ -442,12 +445,14 @@ class TrackingServer(AsyncBase):
 
         
 
-    async def set_tracking_rectangle_status(self, tracked_rectangle):
+    async def set_tracking_rectangle_status(self, drone_id, tracked_rectangle):
         """
          Set/update the current rectangle tracking status.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          tracked_rectangle : TrackRectangle
               The tracked rectangle
 
@@ -455,6 +460,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.SetTrackingRectangleStatusRequest()
+        request.drone_id = drone_id
         
         tracked_rectangle.translate_to_rpc(request.tracked_rectangle)
                 
@@ -463,22 +469,31 @@ class TrackingServer(AsyncBase):
 
         
 
-    async def set_tracking_off_status(self):
+    async def set_tracking_off_status(self, drone_id):
         """
          Set the current tracking status to off.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          
         """
 
         request = tracking_server_pb2.SetTrackingOffStatusRequest()
+        request.drone_id = drone_id
         response = await self._stub.SetTrackingOffStatus(request)
 
         
 
-    async def tracking_point_command(self):
+    async def tracking_point_command(self, drone_id):
         """
          Subscribe to incoming tracking point command.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          track_point : TrackPoint
@@ -488,6 +503,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.SubscribeTrackingPointCommandRequest()
+        request.drone_id = drone_id
         tracking_point_command_stream = self._stub.SubscribeTrackingPointCommand(request)
 
         try:
@@ -499,10 +515,14 @@ class TrackingServer(AsyncBase):
         finally:
             tracking_point_command_stream.cancel()
 
-    async def tracking_rectangle_command(self):
+    async def tracking_rectangle_command(self, drone_id):
         """
          Subscribe to incoming tracking rectangle command.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          track_rectangle : TrackRectangle
@@ -512,6 +532,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.SubscribeTrackingRectangleCommandRequest()
+        request.drone_id = drone_id
         tracking_rectangle_command_stream = self._stub.SubscribeTrackingRectangleCommand(request)
 
         try:
@@ -523,10 +544,14 @@ class TrackingServer(AsyncBase):
         finally:
             tracking_rectangle_command_stream.cancel()
 
-    async def tracking_off_command(self):
+    async def tracking_off_command(self, drone_id):
         """
          Subscribe to incoming tracking off command.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          dummy : int32_t
@@ -536,6 +561,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.SubscribeTrackingOffCommandRequest()
+        request.drone_id = drone_id
         tracking_off_command_stream = self._stub.SubscribeTrackingOffCommand(request)
 
         try:
@@ -547,12 +573,14 @@ class TrackingServer(AsyncBase):
         finally:
             tracking_off_command_stream.cancel()
 
-    async def respond_tracking_point_command(self, command_answer):
+    async def respond_tracking_point_command(self, drone_id, command_answer):
         """
          Respond to an incoming tracking point command.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          command_answer : CommandAnswer
               The ack to answer to the incoming command
 
@@ -563,6 +591,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.RespondTrackingPointCommandRequest()
+        request.drone_id = drone_id
         
         request.command_answer = command_answer.translate_to_rpc()
                 
@@ -573,15 +602,17 @@ class TrackingServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TrackingServerResult.Result.SUCCESS:
-            raise TrackingServerError(result, "respond_tracking_point_command()", command_answer)
+            raise TrackingServerError(result, "respond_tracking_point_command()", drone_id, command_answer)
         
 
-    async def respond_tracking_rectangle_command(self, command_answer):
+    async def respond_tracking_rectangle_command(self, drone_id, command_answer):
         """
          Respond to an incoming tracking rectangle command.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          command_answer : CommandAnswer
               The ack to answer to the incoming command
 
@@ -592,6 +623,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.RespondTrackingRectangleCommandRequest()
+        request.drone_id = drone_id
         
         request.command_answer = command_answer.translate_to_rpc()
                 
@@ -602,15 +634,17 @@ class TrackingServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TrackingServerResult.Result.SUCCESS:
-            raise TrackingServerError(result, "respond_tracking_rectangle_command()", command_answer)
+            raise TrackingServerError(result, "respond_tracking_rectangle_command()", drone_id, command_answer)
         
 
-    async def respond_tracking_off_command(self, command_answer):
+    async def respond_tracking_off_command(self, drone_id, command_answer):
         """
          Respond to an incoming tracking off command.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          command_answer : CommandAnswer
               The ack to answer to the incoming command
 
@@ -621,6 +655,7 @@ class TrackingServer(AsyncBase):
         """
 
         request = tracking_server_pb2.RespondTrackingOffCommandRequest()
+        request.drone_id = drone_id
         
         request.command_answer = command_answer.translate_to_rpc()
                 
@@ -631,5 +666,5 @@ class TrackingServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TrackingServerResult.Result.SUCCESS:
-            raise TrackingServerError(result, "respond_tracking_off_command()", command_answer)
+            raise TrackingServerError(result, "respond_tracking_off_command()", drone_id, command_answer)
         

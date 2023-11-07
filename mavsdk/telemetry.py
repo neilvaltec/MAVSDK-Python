@@ -3625,10 +3625,14 @@ class Telemetry(AsyncBase):
         return TelemetryResult.translate_from_rpc(response.telemetry_result)
     
 
-    async def position(self):
+    async def position(self, drone_id):
         """
          Subscribe to 'position' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          position : Position
@@ -3638,6 +3642,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribePositionRequest()
+        request.drone_id = drone_id
         position_stream = self._stub.SubscribePosition(request)
 
         try:
@@ -3649,10 +3654,14 @@ class Telemetry(AsyncBase):
         finally:
             position_stream.cancel()
 
-    async def home(self):
+    async def home(self, drone_id):
         """
          Subscribe to 'home position' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          home : Position
@@ -3662,6 +3671,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeHomeRequest()
+        request.drone_id = drone_id
         home_stream = self._stub.SubscribeHome(request)
 
         try:
@@ -3673,10 +3683,14 @@ class Telemetry(AsyncBase):
         finally:
             home_stream.cancel()
 
-    async def in_air(self):
+    async def in_air(self, drone_id):
         """
          Subscribe to in-air updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          is_in_air : bool
@@ -3686,6 +3700,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeInAirRequest()
+        request.drone_id = drone_id
         in_air_stream = self._stub.SubscribeInAir(request)
 
         try:
@@ -3697,10 +3712,14 @@ class Telemetry(AsyncBase):
         finally:
             in_air_stream.cancel()
 
-    async def landed_state(self):
+    async def landed_state(self, drone_id):
         """
          Subscribe to landed state updates
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          landed_state : LandedState
@@ -3710,6 +3729,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeLandedStateRequest()
+        request.drone_id = drone_id
         landed_state_stream = self._stub.SubscribeLandedState(request)
 
         try:
@@ -3721,10 +3741,14 @@ class Telemetry(AsyncBase):
         finally:
             landed_state_stream.cancel()
 
-    async def armed(self):
+    async def armed(self, drone_id):
         """
          Subscribe to armed updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          is_armed : bool
@@ -3734,6 +3758,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeArmedRequest()
+        request.drone_id = drone_id
         armed_stream = self._stub.SubscribeArmed(request)
 
         try:
@@ -3745,10 +3770,14 @@ class Telemetry(AsyncBase):
         finally:
             armed_stream.cancel()
 
-    async def vtol_state(self):
+    async def vtol_state(self, drone_id):
         """
          subscribe to vtol state Updates
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          vtol_state : VtolState
@@ -3758,6 +3787,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeVtolStateRequest()
+        request.drone_id = drone_id
         vtol_state_stream = self._stub.SubscribeVtolState(request)
 
         try:
@@ -3769,10 +3799,14 @@ class Telemetry(AsyncBase):
         finally:
             vtol_state_stream.cancel()
 
-    async def attitude_quaternion(self):
+    async def attitude_quaternion(self, drone_id):
         """
          Subscribe to 'attitude' updates (quaternion).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          attitude_quaternion : Quaternion
@@ -3782,6 +3816,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeAttitudeQuaternionRequest()
+        request.drone_id = drone_id
         attitude_quaternion_stream = self._stub.SubscribeAttitudeQuaternion(request)
 
         try:
@@ -3793,10 +3828,14 @@ class Telemetry(AsyncBase):
         finally:
             attitude_quaternion_stream.cancel()
 
-    async def attitude_euler(self):
+    async def attitude_euler(self, drone_id):
         """
          Subscribe to 'attitude' updates (Euler).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          attitude_euler : EulerAngle
@@ -3806,6 +3845,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeAttitudeEulerRequest()
+        request.drone_id = drone_id
         attitude_euler_stream = self._stub.SubscribeAttitudeEuler(request)
 
         try:
@@ -3817,10 +3857,14 @@ class Telemetry(AsyncBase):
         finally:
             attitude_euler_stream.cancel()
 
-    async def attitude_angular_velocity_body(self):
+    async def attitude_angular_velocity_body(self, drone_id):
         """
          Subscribe to 'attitude' updates (angular velocity)
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          attitude_angular_velocity_body : AngularVelocityBody
@@ -3830,6 +3874,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeAttitudeAngularVelocityBodyRequest()
+        request.drone_id = drone_id
         attitude_angular_velocity_body_stream = self._stub.SubscribeAttitudeAngularVelocityBody(request)
 
         try:
@@ -3841,10 +3886,14 @@ class Telemetry(AsyncBase):
         finally:
             attitude_angular_velocity_body_stream.cancel()
 
-    async def camera_attitude_quaternion(self):
+    async def camera_attitude_quaternion(self, drone_id):
         """
          Subscribe to 'camera attitude' updates (quaternion).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          attitude_quaternion : Quaternion
@@ -3854,6 +3903,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeCameraAttitudeQuaternionRequest()
+        request.drone_id = drone_id
         camera_attitude_quaternion_stream = self._stub.SubscribeCameraAttitudeQuaternion(request)
 
         try:
@@ -3865,10 +3915,14 @@ class Telemetry(AsyncBase):
         finally:
             camera_attitude_quaternion_stream.cancel()
 
-    async def camera_attitude_euler(self):
+    async def camera_attitude_euler(self, drone_id):
         """
          Subscribe to 'camera attitude' updates (Euler).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          attitude_euler : EulerAngle
@@ -3878,6 +3932,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeCameraAttitudeEulerRequest()
+        request.drone_id = drone_id
         camera_attitude_euler_stream = self._stub.SubscribeCameraAttitudeEuler(request)
 
         try:
@@ -3889,10 +3944,14 @@ class Telemetry(AsyncBase):
         finally:
             camera_attitude_euler_stream.cancel()
 
-    async def velocity_ned(self):
+    async def velocity_ned(self, drone_id):
         """
          Subscribe to 'ground speed' updates (NED).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          velocity_ned : VelocityNed
@@ -3902,6 +3961,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeVelocityNedRequest()
+        request.drone_id = drone_id
         velocity_ned_stream = self._stub.SubscribeVelocityNed(request)
 
         try:
@@ -3913,10 +3973,14 @@ class Telemetry(AsyncBase):
         finally:
             velocity_ned_stream.cancel()
 
-    async def gps_info(self):
+    async def gps_info(self, drone_id):
         """
          Subscribe to 'GPS info' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          gps_info : GpsInfo
@@ -3926,6 +3990,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeGpsInfoRequest()
+        request.drone_id = drone_id
         gps_info_stream = self._stub.SubscribeGpsInfo(request)
 
         try:
@@ -3937,10 +4002,14 @@ class Telemetry(AsyncBase):
         finally:
             gps_info_stream.cancel()
 
-    async def raw_gps(self):
+    async def raw_gps(self, drone_id):
         """
          Subscribe to 'Raw GPS' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          raw_gps : RawGps
@@ -3950,6 +4019,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeRawGpsRequest()
+        request.drone_id = drone_id
         raw_gps_stream = self._stub.SubscribeRawGps(request)
 
         try:
@@ -3961,10 +4031,14 @@ class Telemetry(AsyncBase):
         finally:
             raw_gps_stream.cancel()
 
-    async def battery(self):
+    async def battery(self, drone_id):
         """
          Subscribe to 'battery' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          battery : Battery
@@ -3974,6 +4048,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeBatteryRequest()
+        request.drone_id = drone_id
         battery_stream = self._stub.SubscribeBattery(request)
 
         try:
@@ -3985,10 +4060,14 @@ class Telemetry(AsyncBase):
         finally:
             battery_stream.cancel()
 
-    async def flight_mode(self):
+    async def flight_mode(self, drone_id):
         """
          Subscribe to 'flight mode' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          flight_mode : FlightMode
@@ -3998,6 +4077,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeFlightModeRequest()
+        request.drone_id = drone_id
         flight_mode_stream = self._stub.SubscribeFlightMode(request)
 
         try:
@@ -4009,10 +4089,14 @@ class Telemetry(AsyncBase):
         finally:
             flight_mode_stream.cancel()
 
-    async def health(self):
+    async def health(self, drone_id):
         """
          Subscribe to 'health' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          health : Health
@@ -4022,6 +4106,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeHealthRequest()
+        request.drone_id = drone_id
         health_stream = self._stub.SubscribeHealth(request)
 
         try:
@@ -4033,10 +4118,14 @@ class Telemetry(AsyncBase):
         finally:
             health_stream.cancel()
 
-    async def rc_status(self):
+    async def rc_status(self, drone_id):
         """
          Subscribe to 'RC status' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          rc_status : RcStatus
@@ -4046,6 +4135,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeRcStatusRequest()
+        request.drone_id = drone_id
         rc_status_stream = self._stub.SubscribeRcStatus(request)
 
         try:
@@ -4057,10 +4147,14 @@ class Telemetry(AsyncBase):
         finally:
             rc_status_stream.cancel()
 
-    async def status_text(self):
+    async def status_text(self, drone_id):
         """
          Subscribe to 'status text' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          status_text : StatusText
@@ -4070,6 +4164,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeStatusTextRequest()
+        request.drone_id = drone_id
         status_text_stream = self._stub.SubscribeStatusText(request)
 
         try:
@@ -4081,10 +4176,14 @@ class Telemetry(AsyncBase):
         finally:
             status_text_stream.cancel()
 
-    async def actuator_control_target(self):
+    async def actuator_control_target(self, drone_id):
         """
          Subscribe to 'actuator control target' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          actuator_control_target : ActuatorControlTarget
@@ -4094,6 +4193,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeActuatorControlTargetRequest()
+        request.drone_id = drone_id
         actuator_control_target_stream = self._stub.SubscribeActuatorControlTarget(request)
 
         try:
@@ -4105,10 +4205,14 @@ class Telemetry(AsyncBase):
         finally:
             actuator_control_target_stream.cancel()
 
-    async def actuator_output_status(self):
+    async def actuator_output_status(self, drone_id):
         """
          Subscribe to 'actuator output status' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          actuator_output_status : ActuatorOutputStatus
@@ -4118,6 +4222,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeActuatorOutputStatusRequest()
+        request.drone_id = drone_id
         actuator_output_status_stream = self._stub.SubscribeActuatorOutputStatus(request)
 
         try:
@@ -4129,10 +4234,14 @@ class Telemetry(AsyncBase):
         finally:
             actuator_output_status_stream.cancel()
 
-    async def odometry(self):
+    async def odometry(self, drone_id):
         """
          Subscribe to 'odometry' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          odometry : Odometry
@@ -4142,6 +4251,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeOdometryRequest()
+        request.drone_id = drone_id
         odometry_stream = self._stub.SubscribeOdometry(request)
 
         try:
@@ -4153,10 +4263,14 @@ class Telemetry(AsyncBase):
         finally:
             odometry_stream.cancel()
 
-    async def position_velocity_ned(self):
+    async def position_velocity_ned(self, drone_id):
         """
          Subscribe to 'position velocity' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          position_velocity_ned : PositionVelocityNed
@@ -4166,6 +4280,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribePositionVelocityNedRequest()
+        request.drone_id = drone_id
         position_velocity_ned_stream = self._stub.SubscribePositionVelocityNed(request)
 
         try:
@@ -4177,10 +4292,14 @@ class Telemetry(AsyncBase):
         finally:
             position_velocity_ned_stream.cancel()
 
-    async def ground_truth(self):
+    async def ground_truth(self, drone_id):
         """
          Subscribe to 'ground truth' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          ground_truth : GroundTruth
@@ -4190,6 +4309,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeGroundTruthRequest()
+        request.drone_id = drone_id
         ground_truth_stream = self._stub.SubscribeGroundTruth(request)
 
         try:
@@ -4201,10 +4321,14 @@ class Telemetry(AsyncBase):
         finally:
             ground_truth_stream.cancel()
 
-    async def fixedwing_metrics(self):
+    async def fixedwing_metrics(self, drone_id):
         """
          Subscribe to 'fixedwing metrics' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          fixedwing_metrics : FixedwingMetrics
@@ -4214,6 +4338,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeFixedwingMetricsRequest()
+        request.drone_id = drone_id
         fixedwing_metrics_stream = self._stub.SubscribeFixedwingMetrics(request)
 
         try:
@@ -4225,10 +4350,14 @@ class Telemetry(AsyncBase):
         finally:
             fixedwing_metrics_stream.cancel()
 
-    async def imu(self):
+    async def imu(self, drone_id):
         """
          Subscribe to 'IMU' updates (in SI units in NED body frame).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          imu : Imu
@@ -4238,6 +4367,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeImuRequest()
+        request.drone_id = drone_id
         imu_stream = self._stub.SubscribeImu(request)
 
         try:
@@ -4249,10 +4379,14 @@ class Telemetry(AsyncBase):
         finally:
             imu_stream.cancel()
 
-    async def scaled_imu(self):
+    async def scaled_imu(self, drone_id):
         """
          Subscribe to 'Scaled IMU' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          imu : Imu
@@ -4262,6 +4396,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeScaledImuRequest()
+        request.drone_id = drone_id
         scaled_imu_stream = self._stub.SubscribeScaledImu(request)
 
         try:
@@ -4273,10 +4408,14 @@ class Telemetry(AsyncBase):
         finally:
             scaled_imu_stream.cancel()
 
-    async def raw_imu(self):
+    async def raw_imu(self, drone_id):
         """
          Subscribe to 'Raw IMU' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          imu : Imu
@@ -4286,6 +4425,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeRawImuRequest()
+        request.drone_id = drone_id
         raw_imu_stream = self._stub.SubscribeRawImu(request)
 
         try:
@@ -4297,10 +4437,14 @@ class Telemetry(AsyncBase):
         finally:
             raw_imu_stream.cancel()
 
-    async def health_all_ok(self):
+    async def health_all_ok(self, drone_id):
         """
          Subscribe to 'HealthAllOk' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          is_health_all_ok : bool
@@ -4310,6 +4454,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeHealthAllOkRequest()
+        request.drone_id = drone_id
         health_all_ok_stream = self._stub.SubscribeHealthAllOk(request)
 
         try:
@@ -4321,10 +4466,14 @@ class Telemetry(AsyncBase):
         finally:
             health_all_ok_stream.cancel()
 
-    async def unix_epoch_time(self):
+    async def unix_epoch_time(self, drone_id):
         """
          Subscribe to 'unix epoch time' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          time_us : uint64_t
@@ -4334,6 +4483,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeUnixEpochTimeRequest()
+        request.drone_id = drone_id
         unix_epoch_time_stream = self._stub.SubscribeUnixEpochTime(request)
 
         try:
@@ -4345,10 +4495,14 @@ class Telemetry(AsyncBase):
         finally:
             unix_epoch_time_stream.cancel()
 
-    async def distance_sensor(self):
+    async def distance_sensor(self, drone_id):
         """
          Subscribe to 'Distance Sensor' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          distance_sensor : DistanceSensor
@@ -4358,6 +4512,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeDistanceSensorRequest()
+        request.drone_id = drone_id
         distance_sensor_stream = self._stub.SubscribeDistanceSensor(request)
 
         try:
@@ -4369,10 +4524,14 @@ class Telemetry(AsyncBase):
         finally:
             distance_sensor_stream.cancel()
 
-    async def scaled_pressure(self):
+    async def scaled_pressure(self, drone_id):
         """
          Subscribe to 'Scaled Pressure' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          scaled_pressure : ScaledPressure
@@ -4382,6 +4541,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeScaledPressureRequest()
+        request.drone_id = drone_id
         scaled_pressure_stream = self._stub.SubscribeScaledPressure(request)
 
         try:
@@ -4393,10 +4553,14 @@ class Telemetry(AsyncBase):
         finally:
             scaled_pressure_stream.cancel()
 
-    async def heading(self):
+    async def heading(self, drone_id):
         """
          Subscribe to 'Heading' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          heading_deg : Heading
@@ -4406,6 +4570,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SubscribeHeadingRequest()
+        request.drone_id = drone_id
         heading_stream = self._stub.SubscribeHeading(request)
 
         try:
@@ -4417,12 +4582,14 @@ class Telemetry(AsyncBase):
         finally:
             heading_stream.cancel()
 
-    async def set_rate_position(self, rate_hz):
+    async def set_rate_position(self, drone_id, rate_hz):
         """
          Set rate to 'position' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4433,6 +4600,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRatePositionRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRatePosition(request)
 
@@ -4440,15 +4608,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_position()", rate_hz)
+            raise TelemetryError(result, "set_rate_position()", drone_id, rate_hz)
         
 
-    async def set_rate_home(self, rate_hz):
+    async def set_rate_home(self, drone_id, rate_hz):
         """
          Set rate to 'home position' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4459,6 +4629,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateHomeRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateHome(request)
 
@@ -4466,15 +4637,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_home()", rate_hz)
+            raise TelemetryError(result, "set_rate_home()", drone_id, rate_hz)
         
 
-    async def set_rate_in_air(self, rate_hz):
+    async def set_rate_in_air(self, drone_id, rate_hz):
         """
          Set rate to in-air updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4485,6 +4658,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateInAirRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateInAir(request)
 
@@ -4492,15 +4666,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_in_air()", rate_hz)
+            raise TelemetryError(result, "set_rate_in_air()", drone_id, rate_hz)
         
 
-    async def set_rate_landed_state(self, rate_hz):
+    async def set_rate_landed_state(self, drone_id, rate_hz):
         """
          Set rate to landed state updates
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4511,6 +4687,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateLandedStateRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateLandedState(request)
 
@@ -4518,15 +4695,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_landed_state()", rate_hz)
+            raise TelemetryError(result, "set_rate_landed_state()", drone_id, rate_hz)
         
 
-    async def set_rate_vtol_state(self, rate_hz):
+    async def set_rate_vtol_state(self, drone_id, rate_hz):
         """
          Set rate to VTOL state updates
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4537,6 +4716,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateVtolStateRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateVtolState(request)
 
@@ -4544,15 +4724,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_vtol_state()", rate_hz)
+            raise TelemetryError(result, "set_rate_vtol_state()", drone_id, rate_hz)
         
 
-    async def set_rate_attitude(self, rate_hz):
+    async def set_rate_attitude(self, drone_id, rate_hz):
         """
          Set rate to 'attitude' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4563,6 +4745,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateAttitudeRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateAttitude(request)
 
@@ -4570,15 +4753,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_attitude()", rate_hz)
+            raise TelemetryError(result, "set_rate_attitude()", drone_id, rate_hz)
         
 
-    async def set_rate_camera_attitude(self, rate_hz):
+    async def set_rate_camera_attitude(self, drone_id, rate_hz):
         """
          Set rate of camera attitude updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4589,6 +4774,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateCameraAttitudeRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateCameraAttitude(request)
 
@@ -4596,15 +4782,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_camera_attitude()", rate_hz)
+            raise TelemetryError(result, "set_rate_camera_attitude()", drone_id, rate_hz)
         
 
-    async def set_rate_velocity_ned(self, rate_hz):
+    async def set_rate_velocity_ned(self, drone_id, rate_hz):
         """
          Set rate to 'ground speed' updates (NED).
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4615,6 +4803,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateVelocityNedRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateVelocityNed(request)
 
@@ -4622,15 +4811,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_velocity_ned()", rate_hz)
+            raise TelemetryError(result, "set_rate_velocity_ned()", drone_id, rate_hz)
         
 
-    async def set_rate_gps_info(self, rate_hz):
+    async def set_rate_gps_info(self, drone_id, rate_hz):
         """
          Set rate to 'GPS info' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4641,6 +4832,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateGpsInfoRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateGpsInfo(request)
 
@@ -4648,15 +4840,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_gps_info()", rate_hz)
+            raise TelemetryError(result, "set_rate_gps_info()", drone_id, rate_hz)
         
 
-    async def set_rate_battery(self, rate_hz):
+    async def set_rate_battery(self, drone_id, rate_hz):
         """
          Set rate to 'battery' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4667,6 +4861,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateBatteryRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateBattery(request)
 
@@ -4674,15 +4869,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_battery()", rate_hz)
+            raise TelemetryError(result, "set_rate_battery()", drone_id, rate_hz)
         
 
-    async def set_rate_rc_status(self, rate_hz):
+    async def set_rate_rc_status(self, drone_id, rate_hz):
         """
          Set rate to 'RC status' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4693,6 +4890,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateRcStatusRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateRcStatus(request)
 
@@ -4700,15 +4898,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_rc_status()", rate_hz)
+            raise TelemetryError(result, "set_rate_rc_status()", drone_id, rate_hz)
         
 
-    async def set_rate_actuator_control_target(self, rate_hz):
+    async def set_rate_actuator_control_target(self, drone_id, rate_hz):
         """
          Set rate to 'actuator control target' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4719,6 +4919,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateActuatorControlTargetRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateActuatorControlTarget(request)
 
@@ -4726,15 +4927,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_actuator_control_target()", rate_hz)
+            raise TelemetryError(result, "set_rate_actuator_control_target()", drone_id, rate_hz)
         
 
-    async def set_rate_actuator_output_status(self, rate_hz):
+    async def set_rate_actuator_output_status(self, drone_id, rate_hz):
         """
          Set rate to 'actuator output status' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4745,6 +4948,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateActuatorOutputStatusRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateActuatorOutputStatus(request)
 
@@ -4752,15 +4956,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_actuator_output_status()", rate_hz)
+            raise TelemetryError(result, "set_rate_actuator_output_status()", drone_id, rate_hz)
         
 
-    async def set_rate_odometry(self, rate_hz):
+    async def set_rate_odometry(self, drone_id, rate_hz):
         """
          Set rate to 'odometry' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4771,6 +4977,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateOdometryRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateOdometry(request)
 
@@ -4778,15 +4985,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_odometry()", rate_hz)
+            raise TelemetryError(result, "set_rate_odometry()", drone_id, rate_hz)
         
 
-    async def set_rate_position_velocity_ned(self, rate_hz):
+    async def set_rate_position_velocity_ned(self, drone_id, rate_hz):
         """
          Set rate to 'position velocity' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4797,6 +5006,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRatePositionVelocityNedRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRatePositionVelocityNed(request)
 
@@ -4804,15 +5014,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_position_velocity_ned()", rate_hz)
+            raise TelemetryError(result, "set_rate_position_velocity_ned()", drone_id, rate_hz)
         
 
-    async def set_rate_ground_truth(self, rate_hz):
+    async def set_rate_ground_truth(self, drone_id, rate_hz):
         """
          Set rate to 'ground truth' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4823,6 +5035,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateGroundTruthRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateGroundTruth(request)
 
@@ -4830,15 +5043,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_ground_truth()", rate_hz)
+            raise TelemetryError(result, "set_rate_ground_truth()", drone_id, rate_hz)
         
 
-    async def set_rate_fixedwing_metrics(self, rate_hz):
+    async def set_rate_fixedwing_metrics(self, drone_id, rate_hz):
         """
          Set rate to 'fixedwing metrics' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4849,6 +5064,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateFixedwingMetricsRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateFixedwingMetrics(request)
 
@@ -4856,15 +5072,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_fixedwing_metrics()", rate_hz)
+            raise TelemetryError(result, "set_rate_fixedwing_metrics()", drone_id, rate_hz)
         
 
-    async def set_rate_imu(self, rate_hz):
+    async def set_rate_imu(self, drone_id, rate_hz):
         """
          Set rate to 'IMU' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4875,6 +5093,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateImuRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateImu(request)
 
@@ -4882,15 +5101,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_imu()", rate_hz)
+            raise TelemetryError(result, "set_rate_imu()", drone_id, rate_hz)
         
 
-    async def set_rate_scaled_imu(self, rate_hz):
+    async def set_rate_scaled_imu(self, drone_id, rate_hz):
         """
          Set rate to 'Scaled IMU' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4901,6 +5122,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateScaledImuRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateScaledImu(request)
 
@@ -4908,15 +5130,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_scaled_imu()", rate_hz)
+            raise TelemetryError(result, "set_rate_scaled_imu()", drone_id, rate_hz)
         
 
-    async def set_rate_raw_imu(self, rate_hz):
+    async def set_rate_raw_imu(self, drone_id, rate_hz):
         """
          Set rate to 'Raw IMU' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4927,6 +5151,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateRawImuRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateRawImu(request)
 
@@ -4934,15 +5159,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_raw_imu()", rate_hz)
+            raise TelemetryError(result, "set_rate_raw_imu()", drone_id, rate_hz)
         
 
-    async def set_rate_unix_epoch_time(self, rate_hz):
+    async def set_rate_unix_epoch_time(self, drone_id, rate_hz):
         """
          Set rate to 'unix epoch time' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4953,6 +5180,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateUnixEpochTimeRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateUnixEpochTime(request)
 
@@ -4960,15 +5188,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_unix_epoch_time()", rate_hz)
+            raise TelemetryError(result, "set_rate_unix_epoch_time()", drone_id, rate_hz)
         
 
-    async def set_rate_distance_sensor(self, rate_hz):
+    async def set_rate_distance_sensor(self, drone_id, rate_hz):
         """
          Set rate to 'Distance Sensor' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -4979,6 +5209,7 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.SetRateDistanceSensorRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateDistanceSensor(request)
 
@@ -4986,13 +5217,17 @@ class Telemetry(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "set_rate_distance_sensor()", rate_hz)
+            raise TelemetryError(result, "set_rate_distance_sensor()", drone_id, rate_hz)
         
 
-    async def get_gps_global_origin(self):
+    async def get_gps_global_origin(self, drone_id):
         """
          Get the GPS location of where the estimator has been initialized.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          gps_global_origin : GpsGlobalOrigin
@@ -5004,13 +5239,17 @@ class Telemetry(AsyncBase):
         """
 
         request = telemetry_pb2.GetGpsGlobalOriginRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetGpsGlobalOrigin(request)
 
         
         result = self._extract_result(response)
 
         if result.result != TelemetryResult.Result.SUCCESS:
-            raise TelemetryError(result, "get_gps_global_origin()")
+            raise TelemetryError(result, "get_gps_global_origin()", drone_id)
         
 
         return GpsGlobalOrigin.translate_from_rpc(response.gps_global_origin)

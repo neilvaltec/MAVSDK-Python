@@ -231,12 +231,14 @@ class Rtk(AsyncBase):
         return RtkResult.translate_from_rpc(response.rtk_result)
     
 
-    async def send_rtcm_data(self, rtcm_data):
+    async def send_rtcm_data(self, drone_id, rtcm_data):
         """
          Send RTCM data.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rtcm_data : RtcmData
               The data
 
@@ -247,6 +249,7 @@ class Rtk(AsyncBase):
         """
 
         request = rtk_pb2.SendRtcmDataRequest()
+        request.drone_id = drone_id
         
         rtcm_data.translate_to_rpc(request.rtcm_data)
                 
@@ -257,5 +260,5 @@ class Rtk(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != RtkResult.Result.SUCCESS:
-            raise RtkError(result, "send_rtcm_data()", rtcm_data)
+            raise RtkError(result, "send_rtcm_data()", drone_id, rtcm_data)
         

@@ -346,10 +346,14 @@ class LogFiles(AsyncBase):
         return LogFilesResult.translate_from_rpc(response.log_files_result)
     
 
-    async def get_entries(self):
+    async def get_entries(self, drone_id):
         """
          Get List of log files.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          entries : [Entry]
@@ -362,13 +366,17 @@ class LogFiles(AsyncBase):
         """
 
         request = log_files_pb2.GetEntriesRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetEntries(request)
 
         
         result = self._extract_result(response)
 
         if result.result != LogFilesResult.Result.SUCCESS:
-            raise LogFilesError(result, "get_entries()")
+            raise LogFilesError(result, "get_entries()", drone_id)
         
 
         entries = []
@@ -378,12 +386,14 @@ class LogFiles(AsyncBase):
         return entries
             
 
-    async def download_log_file(self, entry, path):
+    async def download_log_file(self, drone_id, entry, path):
         """
          Download log file.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          entry : Entry
               Entry of the log file to download.
 
@@ -402,6 +412,7 @@ class LogFiles(AsyncBase):
         """
 
         request = log_files_pb2.SubscribeDownloadLogFileRequest()
+        request.drone_id = drone_id
         
         entry.translate_to_rpc(request.entry)
                 
@@ -419,7 +430,7 @@ class LogFiles(AsyncBase):
                     success_codes.append(LogFilesResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise LogFilesError(result, "download_log_file()", entry, path)
+                    raise LogFilesError(result, "download_log_file()", drone_id, entry, path)
 
                 if result.result == LogFilesResult.Result.SUCCESS:
                     download_log_file_stream.cancel();
@@ -431,9 +442,24 @@ class LogFiles(AsyncBase):
         finally:
             download_log_file_stream.cancel()
 
-    async def erase_all_log_files(self):
+    async def download_log_file(self, drone_id, entry, path):
         """
-         Erase all log files.
+         Download log file synchronously.
+
+         Parameters
+         ----------
+         drone_id : int32_t
+             
+         entry : Entry
+              Entry of the log file to download.
+
+         path : std::string
+              Path of where to download log file to.
+
+         Returns
+         -------
+         progress : ProgressData
+              Progress if result is progress
 
          Raises
          ------
@@ -441,12 +467,54 @@ class LogFiles(AsyncBase):
              If the request fails. The error contains the reason for the failure.
         """
 
+        request = log_files_pb2.DownloadLogFileRequest()
+        
+            
+        request.drone_id = drone_id
+            
+        
+            
+                
+        entry.translate_to_rpc(request.entry)
+                
+            
+        
+            
+        request.path = path
+            
+        response = await self._stub.DownloadLogFile(request)
+
+        
+        result = self._extract_result(response)
+
+        if result.result != LogFilesResult.Result.SUCCESS:
+            raise LogFilesError(result, "download_log_file()", drone_id, entry, path)
+        
+
+        return ProgressData.translate_from_rpc(response.progress)
+            
+
+    async def erase_all_log_files(self, drone_id):
+        """
+         Erase all log files.
+
+         Parameters
+         ----------
+         drone_id : int32_t
+             
+         Raises
+         ------
+         LogFilesError
+             If the request fails. The error contains the reason for the failure.
+        """
+
         request = log_files_pb2.EraseAllLogFilesRequest()
+        request.drone_id = drone_id
         response = await self._stub.EraseAllLogFiles(request)
 
         
         result = self._extract_result(response)
 
         if result.result != LogFilesResult.Result.SUCCESS:
-            raise LogFilesError(result, "erase_all_log_files()")
+            raise LogFilesError(result, "erase_all_log_files()", drone_id)
         

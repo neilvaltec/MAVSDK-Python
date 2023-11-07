@@ -449,12 +449,14 @@ class ComponentInformationServer(AsyncBase):
         return ComponentInformationServerResult.translate_from_rpc(response.component_information_server_result)
     
 
-    async def provide_float_param(self, param):
+    async def provide_float_param(self, drone_id, param):
         """
          Provide a param of type float.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          param : FloatParam
               Float param definition
 
@@ -465,6 +467,7 @@ class ComponentInformationServer(AsyncBase):
         """
 
         request = component_information_server_pb2.ProvideFloatParamRequest()
+        request.drone_id = drone_id
         
         param.translate_to_rpc(request.param)
                 
@@ -475,13 +478,17 @@ class ComponentInformationServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ComponentInformationServerResult.Result.SUCCESS:
-            raise ComponentInformationServerError(result, "provide_float_param()", param)
+            raise ComponentInformationServerError(result, "provide_float_param()", drone_id, param)
         
 
-    async def float_param(self):
+    async def float_param(self, drone_id):
         """
          Subscribe to float param updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          param_update : FloatParamUpdate
@@ -491,6 +498,7 @@ class ComponentInformationServer(AsyncBase):
         """
 
         request = component_information_server_pb2.SubscribeFloatParamRequest()
+        request.drone_id = drone_id
         float_param_stream = self._stub.SubscribeFloatParam(request)
 
         try:

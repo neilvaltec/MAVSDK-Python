@@ -383,7 +383,7 @@ class Gimbal(AsyncBase):
         return GimbalResult.translate_from_rpc(response.gimbal_result)
     
 
-    async def set_pitch_and_yaw(self, pitch_deg, yaw_deg):
+    async def set_pitch_and_yaw(self, drone_id, pitch_deg, yaw_deg):
         """
          Set gimbal pitch and yaw angles.
 
@@ -393,6 +393,8 @@ class Gimbal(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          pitch_deg : float
               Pitch angle in degrees (negative points down)
 
@@ -406,6 +408,7 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.SetPitchAndYawRequest()
+        request.drone_id = drone_id
         request.pitch_deg = pitch_deg
         request.yaw_deg = yaw_deg
         response = await self._stub.SetPitchAndYaw(request)
@@ -414,10 +417,10 @@ class Gimbal(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != GimbalResult.Result.SUCCESS:
-            raise GimbalError(result, "set_pitch_and_yaw()", pitch_deg, yaw_deg)
+            raise GimbalError(result, "set_pitch_and_yaw()", drone_id, pitch_deg, yaw_deg)
         
 
-    async def set_pitch_rate_and_yaw_rate(self, pitch_rate_deg_s, yaw_rate_deg_s):
+    async def set_pitch_rate_and_yaw_rate(self, drone_id, pitch_rate_deg_s, yaw_rate_deg_s):
         """
          Set gimbal angular rates around pitch and yaw axes.
 
@@ -427,6 +430,8 @@ class Gimbal(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          pitch_rate_deg_s : float
               Angular rate around pitch axis in degrees/second (negative downward)
 
@@ -440,6 +445,7 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.SetPitchRateAndYawRateRequest()
+        request.drone_id = drone_id
         request.pitch_rate_deg_s = pitch_rate_deg_s
         request.yaw_rate_deg_s = yaw_rate_deg_s
         response = await self._stub.SetPitchRateAndYawRate(request)
@@ -448,10 +454,10 @@ class Gimbal(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != GimbalResult.Result.SUCCESS:
-            raise GimbalError(result, "set_pitch_rate_and_yaw_rate()", pitch_rate_deg_s, yaw_rate_deg_s)
+            raise GimbalError(result, "set_pitch_rate_and_yaw_rate()", drone_id, pitch_rate_deg_s, yaw_rate_deg_s)
         
 
-    async def set_mode(self, gimbal_mode):
+    async def set_mode(self, drone_id, gimbal_mode):
         """
          Set gimbal mode.
 
@@ -461,6 +467,8 @@ class Gimbal(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          gimbal_mode : GimbalMode
               The mode to be set.
 
@@ -471,6 +479,7 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.SetModeRequest()
+        request.drone_id = drone_id
         
         request.gimbal_mode = gimbal_mode.translate_to_rpc()
                 
@@ -481,10 +490,10 @@ class Gimbal(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != GimbalResult.Result.SUCCESS:
-            raise GimbalError(result, "set_mode()", gimbal_mode)
+            raise GimbalError(result, "set_mode()", drone_id, gimbal_mode)
         
 
-    async def set_roi_location(self, latitude_deg, longitude_deg, altitude_m):
+    async def set_roi_location(self, drone_id, latitude_deg, longitude_deg, altitude_m):
         """
          Set gimbal region of interest (ROI).
 
@@ -496,6 +505,8 @@ class Gimbal(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          latitude_deg : double
               Latitude in degrees
 
@@ -512,6 +523,7 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.SetRoiLocationRequest()
+        request.drone_id = drone_id
         request.latitude_deg = latitude_deg
         request.longitude_deg = longitude_deg
         request.altitude_m = altitude_m
@@ -521,10 +533,10 @@ class Gimbal(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != GimbalResult.Result.SUCCESS:
-            raise GimbalError(result, "set_roi_location()", latitude_deg, longitude_deg, altitude_m)
+            raise GimbalError(result, "set_roi_location()", drone_id, latitude_deg, longitude_deg, altitude_m)
         
 
-    async def take_control(self, control_mode):
+    async def take_control(self, drone_id, control_mode):
         """
          Take control.
 
@@ -538,6 +550,8 @@ class Gimbal(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          control_mode : ControlMode
               Control mode (primary or secondary)
 
@@ -548,6 +562,7 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.TakeControlRequest()
+        request.drone_id = drone_id
         
         request.control_mode = control_mode.translate_to_rpc()
                 
@@ -558,15 +573,19 @@ class Gimbal(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != GimbalResult.Result.SUCCESS:
-            raise GimbalError(result, "take_control()", control_mode)
+            raise GimbalError(result, "take_control()", drone_id, control_mode)
         
 
-    async def release_control(self):
+    async def release_control(self, drone_id):
         """
          Release control.
 
          Release control, such that other components can control the gimbal.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          GimbalError
@@ -574,16 +593,17 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.ReleaseControlRequest()
+        request.drone_id = drone_id
         response = await self._stub.ReleaseControl(request)
 
         
         result = self._extract_result(response)
 
         if result.result != GimbalResult.Result.SUCCESS:
-            raise GimbalError(result, "release_control()")
+            raise GimbalError(result, "release_control()", drone_id)
         
 
-    async def control(self):
+    async def control(self, drone_id):
         """
          Subscribe to control status updates.
 
@@ -591,6 +611,10 @@ class Gimbal(AsyncBase):
          no control over the gimbal. Also, it gives the system and component ids
          of the other components in control (if any).
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          control_status : ControlStatus
@@ -600,6 +624,7 @@ class Gimbal(AsyncBase):
         """
 
         request = gimbal_pb2.SubscribeControlRequest()
+        request.drone_id = drone_id
         control_stream = self._stub.SubscribeControl(request)
 
         try:

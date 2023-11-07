@@ -3222,12 +3222,14 @@ class TelemetryServer(AsyncBase):
         return TelemetryServerResult.translate_from_rpc(response.telemetry_server_result)
     
 
-    async def publish_position(self, position, velocity_ned, heading):
+    async def publish_position(self, drone_id, position, velocity_ned, heading):
         """
          Publish to 'position' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          position : Position
               The next position
 
@@ -3244,6 +3246,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishPositionRequest()
+        request.drone_id = drone_id
         
         position.translate_to_rpc(request.position)
                 
@@ -3262,15 +3265,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_position()", position, velocity_ned, heading)
+            raise TelemetryServerError(result, "publish_position()", drone_id, position, velocity_ned, heading)
         
 
-    async def publish_home(self, home):
+    async def publish_home(self, drone_id, home):
         """
          Publish to 'home position' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          home : Position
               The next home position
 
@@ -3281,6 +3286,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishHomeRequest()
+        request.drone_id = drone_id
         
         home.translate_to_rpc(request.home)
                 
@@ -3291,15 +3297,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_home()", home)
+            raise TelemetryServerError(result, "publish_home()", drone_id, home)
         
 
-    async def publish_sys_status(self, battery, rc_receiver_status, gyro_status, accel_status, mag_status, gps_status):
+    async def publish_sys_status(self, drone_id, battery, rc_receiver_status, gyro_status, accel_status, mag_status, gps_status):
         """
          Publish 'sys status' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          battery : Battery
               The next 'battery' state
 
@@ -3321,6 +3329,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishSysStatusRequest()
+        request.drone_id = drone_id
         
         battery.translate_to_rpc(request.battery)
                 
@@ -3336,15 +3345,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_sys_status()", battery, rc_receiver_status, gyro_status, accel_status, mag_status, gps_status)
+            raise TelemetryServerError(result, "publish_sys_status()", drone_id, battery, rc_receiver_status, gyro_status, accel_status, mag_status, gps_status)
         
 
-    async def publish_extended_sys_state(self, vtol_state, landed_state):
+    async def publish_extended_sys_state(self, drone_id, vtol_state, landed_state):
         """
          Publish 'extended sys state' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          vtol_state : VtolState
              
          landed_state : LandedState
@@ -3356,6 +3367,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishExtendedSysStateRequest()
+        request.drone_id = drone_id
         
         request.vtol_state = vtol_state.translate_to_rpc()
                 
@@ -3370,15 +3382,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_extended_sys_state()", vtol_state, landed_state)
+            raise TelemetryServerError(result, "publish_extended_sys_state()", drone_id, vtol_state, landed_state)
         
 
-    async def publish_raw_gps(self, raw_gps, gps_info):
+    async def publish_raw_gps(self, drone_id, raw_gps, gps_info):
         """
          Publish to 'Raw GPS' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          raw_gps : RawGps
               The next 'Raw GPS' state. Warning: this is an advanced feature, use `Position` updates to get the location of the drone!
 
@@ -3392,6 +3406,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishRawGpsRequest()
+        request.drone_id = drone_id
         
         raw_gps.translate_to_rpc(request.raw_gps)
                 
@@ -3406,15 +3421,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_raw_gps()", raw_gps, gps_info)
+            raise TelemetryServerError(result, "publish_raw_gps()", drone_id, raw_gps, gps_info)
         
 
-    async def publish_battery(self, battery):
+    async def publish_battery(self, drone_id, battery):
         """
          Publish to 'battery' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          battery : Battery
               The next 'battery' state
 
@@ -3425,6 +3442,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishBatteryRequest()
+        request.drone_id = drone_id
         
         battery.translate_to_rpc(request.battery)
                 
@@ -3435,15 +3453,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_battery()", battery)
+            raise TelemetryServerError(result, "publish_battery()", drone_id, battery)
         
 
-    async def publish_status_text(self, status_text):
+    async def publish_status_text(self, drone_id, status_text):
         """
          Publish to 'status text' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          status_text : StatusText
               The next 'status text'
 
@@ -3454,6 +3474,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishStatusTextRequest()
+        request.drone_id = drone_id
         
         status_text.translate_to_rpc(request.status_text)
                 
@@ -3464,15 +3485,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_status_text()", status_text)
+            raise TelemetryServerError(result, "publish_status_text()", drone_id, status_text)
         
 
-    async def publish_odometry(self, odometry):
+    async def publish_odometry(self, drone_id, odometry):
         """
          Publish to 'odometry' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          odometry : Odometry
               The next odometry status
 
@@ -3483,6 +3506,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishOdometryRequest()
+        request.drone_id = drone_id
         
         odometry.translate_to_rpc(request.odometry)
                 
@@ -3493,15 +3517,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_odometry()", odometry)
+            raise TelemetryServerError(result, "publish_odometry()", drone_id, odometry)
         
 
-    async def publish_position_velocity_ned(self, position_velocity_ned):
+    async def publish_position_velocity_ned(self, drone_id, position_velocity_ned):
         """
          Publish to 'position velocity' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          position_velocity_ned : PositionVelocityNed
               The next position and velocity status
 
@@ -3512,6 +3538,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishPositionVelocityNedRequest()
+        request.drone_id = drone_id
         
         position_velocity_ned.translate_to_rpc(request.position_velocity_ned)
                 
@@ -3522,15 +3549,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_position_velocity_ned()", position_velocity_ned)
+            raise TelemetryServerError(result, "publish_position_velocity_ned()", drone_id, position_velocity_ned)
         
 
-    async def publish_ground_truth(self, ground_truth):
+    async def publish_ground_truth(self, drone_id, ground_truth):
         """
          Publish to 'ground truth' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          ground_truth : GroundTruth
               Ground truth position information available in simulation
 
@@ -3541,6 +3570,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishGroundTruthRequest()
+        request.drone_id = drone_id
         
         ground_truth.translate_to_rpc(request.ground_truth)
                 
@@ -3551,15 +3581,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_ground_truth()", ground_truth)
+            raise TelemetryServerError(result, "publish_ground_truth()", drone_id, ground_truth)
         
 
-    async def publish_imu(self, imu):
+    async def publish_imu(self, drone_id, imu):
         """
          Publish to 'IMU' updates (in SI units in NED body frame).
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          imu : Imu
               The next IMU status
 
@@ -3570,6 +3602,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishImuRequest()
+        request.drone_id = drone_id
         
         imu.translate_to_rpc(request.imu)
                 
@@ -3580,15 +3613,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_imu()", imu)
+            raise TelemetryServerError(result, "publish_imu()", drone_id, imu)
         
 
-    async def publish_scaled_imu(self, imu):
+    async def publish_scaled_imu(self, drone_id, imu):
         """
          Publish to 'Scaled IMU' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          imu : Imu
               The next scaled IMU status
 
@@ -3599,6 +3634,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishScaledImuRequest()
+        request.drone_id = drone_id
         
         imu.translate_to_rpc(request.imu)
                 
@@ -3609,15 +3645,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_scaled_imu()", imu)
+            raise TelemetryServerError(result, "publish_scaled_imu()", drone_id, imu)
         
 
-    async def publish_raw_imu(self, imu):
+    async def publish_raw_imu(self, drone_id, imu):
         """
          Publish to 'Raw IMU' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          imu : Imu
               The next raw IMU status
 
@@ -3628,6 +3666,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishRawImuRequest()
+        request.drone_id = drone_id
         
         imu.translate_to_rpc(request.imu)
                 
@@ -3638,15 +3677,17 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_raw_imu()", imu)
+            raise TelemetryServerError(result, "publish_raw_imu()", drone_id, imu)
         
 
-    async def publish_unix_epoch_time(self, time_us):
+    async def publish_unix_epoch_time(self, drone_id, time_us):
         """
          Publish to 'unix epoch time' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          time_us : uint64_t
               The next 'unix epoch time' status
 
@@ -3657,6 +3698,7 @@ class TelemetryServer(AsyncBase):
         """
 
         request = telemetry_server_pb2.PublishUnixEpochTimeRequest()
+        request.drone_id = drone_id
         request.time_us = time_us
         response = await self._stub.PublishUnixEpochTime(request)
 
@@ -3664,5 +3706,5 @@ class TelemetryServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TelemetryServerResult.Result.SUCCESS:
-            raise TelemetryServerError(result, "publish_unix_epoch_time()", time_us)
+            raise TelemetryServerError(result, "publish_unix_epoch_time()", drone_id, time_us)
         

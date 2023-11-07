@@ -588,10 +588,14 @@ class Transponder(AsyncBase):
         return TransponderResult.translate_from_rpc(response.transponder_result)
     
 
-    async def transponder(self):
+    async def transponder(self, drone_id):
         """
          Subscribe to 'transponder' updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          transponder : AdsbVehicle
@@ -601,6 +605,7 @@ class Transponder(AsyncBase):
         """
 
         request = transponder_pb2.SubscribeTransponderRequest()
+        request.drone_id = drone_id
         transponder_stream = self._stub.SubscribeTransponder(request)
 
         try:
@@ -612,12 +617,14 @@ class Transponder(AsyncBase):
         finally:
             transponder_stream.cancel()
 
-    async def set_rate_transponder(self, rate_hz):
+    async def set_rate_transponder(self, drone_id, rate_hz):
         """
          Set rate to 'transponder' updates.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          rate_hz : double
               The requested rate (in Hertz)
 
@@ -628,6 +635,7 @@ class Transponder(AsyncBase):
         """
 
         request = transponder_pb2.SetRateTransponderRequest()
+        request.drone_id = drone_id
         request.rate_hz = rate_hz
         response = await self._stub.SetRateTransponder(request)
 
@@ -635,5 +643,5 @@ class Transponder(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != TransponderResult.Result.SUCCESS:
-            raise TransponderError(result, "set_rate_transponder()", rate_hz)
+            raise TransponderError(result, "set_rate_transponder()", drone_id, rate_hz)
         

@@ -417,10 +417,14 @@ class ComponentInformation(AsyncBase):
         return ComponentInformationResult.translate_from_rpc(response.component_information_result)
     
 
-    async def access_float_params(self):
+    async def access_float_params(self, drone_id):
         """
          List available float params.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          params : [FloatParam]
@@ -433,13 +437,17 @@ class ComponentInformation(AsyncBase):
         """
 
         request = component_information_pb2.AccessFloatParamsRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.AccessFloatParams(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ComponentInformationResult.Result.SUCCESS:
-            raise ComponentInformationError(result, "access_float_params()")
+            raise ComponentInformationError(result, "access_float_params()", drone_id)
         
 
         params = []
@@ -449,10 +457,14 @@ class ComponentInformation(AsyncBase):
         return params
             
 
-    async def float_param(self):
+    async def float_param(self, drone_id):
         """
          Subscribe to float param changes/updates.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          param_update : FloatParamUpdate
@@ -462,6 +474,7 @@ class ComponentInformation(AsyncBase):
         """
 
         request = component_information_pb2.SubscribeFloatParamRequest()
+        request.drone_id = drone_id
         float_param_stream = self._stub.SubscribeFloatParam(request)
 
         try:

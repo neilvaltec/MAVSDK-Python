@@ -337,10 +337,14 @@ class Calibration(AsyncBase):
         return CalibrationResult.translate_from_rpc(response.calibration_result)
     
 
-    async def calibrate_gyro(self):
+    async def calibrate_gyro(self, drone_id):
         """
          Perform gyro calibration.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          progress_data : ProgressData
@@ -353,6 +357,7 @@ class Calibration(AsyncBase):
         """
 
         request = calibration_pb2.SubscribeCalibrateGyroRequest()
+        request.drone_id = drone_id
         calibrate_gyro_stream = self._stub.SubscribeCalibrateGyro(request)
 
         try:
@@ -365,7 +370,7 @@ class Calibration(AsyncBase):
                     success_codes.append(CalibrationResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise CalibrationError(result, "calibrate_gyro()")
+                    raise CalibrationError(result, "calibrate_gyro()", drone_id)
 
                 if result.result == CalibrationResult.Result.SUCCESS:
                     calibrate_gyro_stream.cancel();
@@ -377,10 +382,14 @@ class Calibration(AsyncBase):
         finally:
             calibrate_gyro_stream.cancel()
 
-    async def calibrate_accelerometer(self):
+    async def calibrate_accelerometer(self, drone_id):
         """
          Perform accelerometer calibration.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          progress_data : ProgressData
@@ -393,6 +402,7 @@ class Calibration(AsyncBase):
         """
 
         request = calibration_pb2.SubscribeCalibrateAccelerometerRequest()
+        request.drone_id = drone_id
         calibrate_accelerometer_stream = self._stub.SubscribeCalibrateAccelerometer(request)
 
         try:
@@ -405,7 +415,7 @@ class Calibration(AsyncBase):
                     success_codes.append(CalibrationResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise CalibrationError(result, "calibrate_accelerometer()")
+                    raise CalibrationError(result, "calibrate_accelerometer()", drone_id)
 
                 if result.result == CalibrationResult.Result.SUCCESS:
                     calibrate_accelerometer_stream.cancel();
@@ -417,10 +427,14 @@ class Calibration(AsyncBase):
         finally:
             calibrate_accelerometer_stream.cancel()
 
-    async def calibrate_magnetometer(self):
+    async def calibrate_magnetometer(self, drone_id):
         """
          Perform magnetometer calibration.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          progress_data : ProgressData
@@ -433,6 +447,7 @@ class Calibration(AsyncBase):
         """
 
         request = calibration_pb2.SubscribeCalibrateMagnetometerRequest()
+        request.drone_id = drone_id
         calibrate_magnetometer_stream = self._stub.SubscribeCalibrateMagnetometer(request)
 
         try:
@@ -445,7 +460,7 @@ class Calibration(AsyncBase):
                     success_codes.append(CalibrationResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise CalibrationError(result, "calibrate_magnetometer()")
+                    raise CalibrationError(result, "calibrate_magnetometer()", drone_id)
 
                 if result.result == CalibrationResult.Result.SUCCESS:
                     calibrate_magnetometer_stream.cancel();
@@ -457,10 +472,14 @@ class Calibration(AsyncBase):
         finally:
             calibrate_magnetometer_stream.cancel()
 
-    async def calibrate_level_horizon(self):
+    async def calibrate_level_horizon(self, drone_id):
         """
          Perform board level horizon calibration.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          progress_data : ProgressData
@@ -473,6 +492,7 @@ class Calibration(AsyncBase):
         """
 
         request = calibration_pb2.SubscribeCalibrateLevelHorizonRequest()
+        request.drone_id = drone_id
         calibrate_level_horizon_stream = self._stub.SubscribeCalibrateLevelHorizon(request)
 
         try:
@@ -485,7 +505,7 @@ class Calibration(AsyncBase):
                     success_codes.append(CalibrationResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise CalibrationError(result, "calibrate_level_horizon()")
+                    raise CalibrationError(result, "calibrate_level_horizon()", drone_id)
 
                 if result.result == CalibrationResult.Result.SUCCESS:
                     calibrate_level_horizon_stream.cancel();
@@ -497,10 +517,14 @@ class Calibration(AsyncBase):
         finally:
             calibrate_level_horizon_stream.cancel()
 
-    async def calibrate_gimbal_accelerometer(self):
+    async def calibrate_gimbal_accelerometer(self, drone_id):
         """
          Perform gimbal accelerometer calibration.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          progress_data : ProgressData
@@ -513,6 +537,7 @@ class Calibration(AsyncBase):
         """
 
         request = calibration_pb2.SubscribeCalibrateGimbalAccelerometerRequest()
+        request.drone_id = drone_id
         calibrate_gimbal_accelerometer_stream = self._stub.SubscribeCalibrateGimbalAccelerometer(request)
 
         try:
@@ -525,7 +550,7 @@ class Calibration(AsyncBase):
                     success_codes.append(CalibrationResult.Result.NEXT)
 
                 if result.result not in success_codes:
-                    raise CalibrationError(result, "calibrate_gimbal_accelerometer()")
+                    raise CalibrationError(result, "calibrate_gimbal_accelerometer()", drone_id)
 
                 if result.result == CalibrationResult.Result.SUCCESS:
                     calibrate_gimbal_accelerometer_stream.cancel();
@@ -537,10 +562,14 @@ class Calibration(AsyncBase):
         finally:
             calibrate_gimbal_accelerometer_stream.cancel()
 
-    async def cancel(self):
+    async def cancel(self, drone_id):
         """
          Cancel ongoing calibration process.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          CalibrationError
@@ -548,11 +577,12 @@ class Calibration(AsyncBase):
         """
 
         request = calibration_pb2.CancelRequest()
+        request.drone_id = drone_id
         response = await self._stub.Cancel(request)
 
         
         result = self._extract_result(response)
 
         if result.result != CalibrationResult.Result.SUCCESS:
-            raise CalibrationError(result, "cancel()")
+            raise CalibrationError(result, "cancel()", drone_id)
         

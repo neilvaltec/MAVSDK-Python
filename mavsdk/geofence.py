@@ -388,7 +388,7 @@ class Geofence(AsyncBase):
         return GeofenceResult.translate_from_rpc(response.geofence_result)
     
 
-    async def upload_geofence(self, polygons):
+    async def upload_geofence(self, drone_id, polygons):
         """
          Upload a geofence.
 
@@ -397,6 +397,8 @@ class Geofence(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          polygons : [Polygon]
               Polygon(s) representing the geofence(s)
 
@@ -407,6 +409,7 @@ class Geofence(AsyncBase):
         """
 
         request = geofence_pb2.UploadGeofenceRequest()
+        request.drone_id = drone_id
         
         rpc_elems_list = []
         for elem in polygons:
@@ -424,13 +427,17 @@ class Geofence(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != GeofenceResult.Result.SUCCESS:
-            raise GeofenceError(result, "upload_geofence()", polygons)
+            raise GeofenceError(result, "upload_geofence()", drone_id, polygons)
         
 
-    async def clear_geofence(self):
+    async def clear_geofence(self, drone_id):
         """
          Clear all geofences saved on the vehicle.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          GeofenceError
@@ -438,11 +445,12 @@ class Geofence(AsyncBase):
         """
 
         request = geofence_pb2.ClearGeofenceRequest()
+        request.drone_id = drone_id
         response = await self._stub.ClearGeofence(request)
 
         
         result = self._extract_result(response)
 
         if result.result != GeofenceResult.Result.SUCCESS:
-            raise GeofenceError(result, "clear_geofence()")
+            raise GeofenceError(result, "clear_geofence()", drone_id)
         

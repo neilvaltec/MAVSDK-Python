@@ -205,13 +205,17 @@ class ManualControl(AsyncBase):
         return ManualControlResult.translate_from_rpc(response.manual_control_result)
     
 
-    async def start_position_control(self):
+    async def start_position_control(self, drone_id):
         """
          Start position control using e.g. joystick input.
 
          Requires manual control input to be sent regularly already.
          Requires a valid position using e.g. GPS, external vision, or optical flow.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ManualControlError
@@ -219,22 +223,27 @@ class ManualControl(AsyncBase):
         """
 
         request = manual_control_pb2.StartPositionControlRequest()
+        request.drone_id = drone_id
         response = await self._stub.StartPositionControl(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ManualControlResult.Result.SUCCESS:
-            raise ManualControlError(result, "start_position_control()")
+            raise ManualControlError(result, "start_position_control()", drone_id)
         
 
-    async def start_altitude_control(self):
+    async def start_altitude_control(self, drone_id):
         """
          Start altitude control
 
          Requires manual control input to be sent regularly already.
          Does not require a  valid position e.g. GPS.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          ManualControlError
@@ -242,16 +251,17 @@ class ManualControl(AsyncBase):
         """
 
         request = manual_control_pb2.StartAltitudeControlRequest()
+        request.drone_id = drone_id
         response = await self._stub.StartAltitudeControl(request)
 
         
         result = self._extract_result(response)
 
         if result.result != ManualControlResult.Result.SUCCESS:
-            raise ManualControlError(result, "start_altitude_control()")
+            raise ManualControlError(result, "start_altitude_control()", drone_id)
         
 
-    async def set_manual_control_input(self, x, y, z, r):
+    async def set_manual_control_input(self, drone_id, x, y, z, r):
         """
          Set manual control input
 
@@ -260,6 +270,8 @@ class ManualControl(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          x : float
               value between -1. to 1. negative -> backwards, positive -> forwards
 
@@ -279,6 +291,7 @@ class ManualControl(AsyncBase):
         """
 
         request = manual_control_pb2.SetManualControlInputRequest()
+        request.drone_id = drone_id
         request.x = x
         request.y = y
         request.z = z
@@ -289,5 +302,5 @@ class ManualControl(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ManualControlResult.Result.SUCCESS:
-            raise ManualControlError(result, "set_manual_control_input()", x, y, z, r)
+            raise ManualControlError(result, "set_manual_control_input()", drone_id, x, y, z, r)
         

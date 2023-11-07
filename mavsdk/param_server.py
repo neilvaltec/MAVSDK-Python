@@ -522,7 +522,7 @@ class ParamServer(AsyncBase):
         return ParamServerResult.translate_from_rpc(response.param_server_result)
     
 
-    async def retrieve_param_int(self, name):
+    async def retrieve_param_int(self, drone_id, name):
         """
          Retrieve an int parameter.
 
@@ -530,6 +530,8 @@ class ParamServer(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          name : std::string
               Name of the parameter
 
@@ -547,6 +549,10 @@ class ParamServer(AsyncBase):
         request = param_server_pb2.RetrieveParamIntRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
         request.name = name
             
         response = await self._stub.RetrieveParamInt(request)
@@ -555,13 +561,13 @@ class ParamServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ParamServerResult.Result.SUCCESS:
-            raise ParamServerError(result, "retrieve_param_int()", name)
+            raise ParamServerError(result, "retrieve_param_int()", drone_id, name)
         
 
         return response.value
         
 
-    async def provide_param_int(self, name, value):
+    async def provide_param_int(self, drone_id, name, value):
         """
          Provide an int parameter.
 
@@ -569,6 +575,8 @@ class ParamServer(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          name : std::string
               Name of the parameter to provide
 
@@ -582,6 +590,7 @@ class ParamServer(AsyncBase):
         """
 
         request = param_server_pb2.ProvideParamIntRequest()
+        request.drone_id = drone_id
         request.name = name
         request.value = value
         response = await self._stub.ProvideParamInt(request)
@@ -590,10 +599,10 @@ class ParamServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ParamServerResult.Result.SUCCESS:
-            raise ParamServerError(result, "provide_param_int()", name, value)
+            raise ParamServerError(result, "provide_param_int()", drone_id, name, value)
         
 
-    async def retrieve_param_float(self, name):
+    async def retrieve_param_float(self, drone_id, name):
         """
          Retrieve a float parameter.
 
@@ -601,6 +610,8 @@ class ParamServer(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          name : std::string
               Name of the parameter
 
@@ -618,6 +629,10 @@ class ParamServer(AsyncBase):
         request = param_server_pb2.RetrieveParamFloatRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
         request.name = name
             
         response = await self._stub.RetrieveParamFloat(request)
@@ -626,13 +641,13 @@ class ParamServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ParamServerResult.Result.SUCCESS:
-            raise ParamServerError(result, "retrieve_param_float()", name)
+            raise ParamServerError(result, "retrieve_param_float()", drone_id, name)
         
 
         return response.value
         
 
-    async def provide_param_float(self, name, value):
+    async def provide_param_float(self, drone_id, name, value):
         """
          Provide a float parameter.
 
@@ -640,6 +655,8 @@ class ParamServer(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          name : std::string
               Name of the parameter to provide
 
@@ -653,6 +670,7 @@ class ParamServer(AsyncBase):
         """
 
         request = param_server_pb2.ProvideParamFloatRequest()
+        request.drone_id = drone_id
         request.name = name
         request.value = value
         response = await self._stub.ProvideParamFloat(request)
@@ -661,10 +679,10 @@ class ParamServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ParamServerResult.Result.SUCCESS:
-            raise ParamServerError(result, "provide_param_float()", name, value)
+            raise ParamServerError(result, "provide_param_float()", drone_id, name, value)
         
 
-    async def retrieve_param_custom(self, name):
+    async def retrieve_param_custom(self, drone_id, name):
         """
          Retrieve a custom parameter.
 
@@ -672,6 +690,8 @@ class ParamServer(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          name : std::string
               Name of the parameter
 
@@ -689,6 +709,10 @@ class ParamServer(AsyncBase):
         request = param_server_pb2.RetrieveParamCustomRequest()
         
             
+        request.drone_id = drone_id
+            
+        
+            
         request.name = name
             
         response = await self._stub.RetrieveParamCustom(request)
@@ -697,13 +721,13 @@ class ParamServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ParamServerResult.Result.SUCCESS:
-            raise ParamServerError(result, "retrieve_param_custom()", name)
+            raise ParamServerError(result, "retrieve_param_custom()", drone_id, name)
         
 
         return response.value
         
 
-    async def provide_param_custom(self, name, value):
+    async def provide_param_custom(self, drone_id, name, value):
         """
          Provide a custom parameter.
 
@@ -711,6 +735,8 @@ class ParamServer(AsyncBase):
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          name : std::string
               Name of the parameter to provide
 
@@ -724,6 +750,7 @@ class ParamServer(AsyncBase):
         """
 
         request = param_server_pb2.ProvideParamCustomRequest()
+        request.drone_id = drone_id
         request.name = name
         request.value = value
         response = await self._stub.ProvideParamCustom(request)
@@ -732,13 +759,17 @@ class ParamServer(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ParamServerResult.Result.SUCCESS:
-            raise ParamServerError(result, "provide_param_custom()", name, value)
+            raise ParamServerError(result, "provide_param_custom()", drone_id, name, value)
         
 
-    async def retrieve_all_params(self):
+    async def retrieve_all_params(self, drone_id):
         """
          Retrieve all parameters.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          params : AllParams
@@ -748,6 +779,10 @@ class ParamServer(AsyncBase):
         """
 
         request = param_server_pb2.RetrieveAllParamsRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.RetrieveAllParams(request)
 
         

@@ -510,10 +510,14 @@ class FollowMe(AsyncBase):
         return FollowMeResult.translate_from_rpc(response.follow_me_result)
     
 
-    async def get_config(self):
+    async def get_config(self, drone_id):
         """
          Get current configuration.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          config : Config
@@ -523,6 +527,10 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.GetConfigRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetConfig(request)
 
         
@@ -530,12 +538,14 @@ class FollowMe(AsyncBase):
         return Config.translate_from_rpc(response.config)
             
 
-    async def set_config(self, config):
+    async def set_config(self, drone_id, config):
         """
          Apply configuration by sending it to the system.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          config : Config
               The new configuration to be set
 
@@ -546,6 +556,7 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.SetConfigRequest()
+        request.drone_id = drone_id
         
         config.translate_to_rpc(request.config)
                 
@@ -556,13 +567,17 @@ class FollowMe(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FollowMeResult.Result.SUCCESS:
-            raise FollowMeError(result, "set_config()", config)
+            raise FollowMeError(result, "set_config()", drone_id, config)
         
 
-    async def is_active(self):
+    async def is_active(self, drone_id):
         """
          Check if FollowMe is active.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          is_active : bool
@@ -572,6 +587,10 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.IsActiveRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.IsActive(request)
 
         
@@ -579,12 +598,14 @@ class FollowMe(AsyncBase):
         return response.is_active
         
 
-    async def set_target_location(self, location):
+    async def set_target_location(self, drone_id, location):
         """
          Set location of the moving target.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          location : TargetLocation
               The new TargetLocation to follow
 
@@ -595,6 +616,7 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.SetTargetLocationRequest()
+        request.drone_id = drone_id
         
         location.translate_to_rpc(request.location)
                 
@@ -605,13 +627,17 @@ class FollowMe(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != FollowMeResult.Result.SUCCESS:
-            raise FollowMeError(result, "set_target_location()", location)
+            raise FollowMeError(result, "set_target_location()", drone_id, location)
         
 
-    async def get_last_location(self):
+    async def get_last_location(self, drone_id):
         """
          Get the last location of the target.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Returns
          -------
          location : TargetLocation
@@ -621,6 +647,10 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.GetLastLocationRequest()
+        
+            
+        request.drone_id = drone_id
+            
         response = await self._stub.GetLastLocation(request)
 
         
@@ -628,10 +658,14 @@ class FollowMe(AsyncBase):
         return TargetLocation.translate_from_rpc(response.location)
             
 
-    async def start(self):
+    async def start(self, drone_id):
         """
          Start FollowMe mode.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          FollowMeError
@@ -639,19 +673,24 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.StartRequest()
+        request.drone_id = drone_id
         response = await self._stub.Start(request)
 
         
         result = self._extract_result(response)
 
         if result.result != FollowMeResult.Result.SUCCESS:
-            raise FollowMeError(result, "start()")
+            raise FollowMeError(result, "start()", drone_id)
         
 
-    async def stop(self):
+    async def stop(self, drone_id):
         """
          Stop FollowMe mode.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Raises
          ------
          FollowMeError
@@ -659,11 +698,12 @@ class FollowMe(AsyncBase):
         """
 
         request = follow_me_pb2.StopRequest()
+        request.drone_id = drone_id
         response = await self._stub.Stop(request)
 
         
         result = self._extract_result(response)
 
         if result.result != FollowMeResult.Result.SUCCESS:
-            raise FollowMeError(result, "stop()")
+            raise FollowMeError(result, "stop()", drone_id)
         

@@ -182,12 +182,14 @@ class Shell(AsyncBase):
         return ShellResult.translate_from_rpc(response.shell_result)
     
 
-    async def send(self, command):
+    async def send(self, drone_id, command):
         """
          Send a command line.
 
          Parameters
          ----------
+         drone_id : int32_t
+             
          command : std::string
               The command line to send
 
@@ -198,6 +200,7 @@ class Shell(AsyncBase):
         """
 
         request = shell_pb2.SendRequest()
+        request.drone_id = drone_id
         request.command = command
         response = await self._stub.Send(request)
 
@@ -205,15 +208,19 @@ class Shell(AsyncBase):
         result = self._extract_result(response)
 
         if result.result != ShellResult.Result.SUCCESS:
-            raise ShellError(result, "send()", command)
+            raise ShellError(result, "send()", drone_id, command)
         
 
-    async def receive(self):
+    async def receive(self, drone_id):
         """
          Receive feedback from a sent command line.
 
          This subscription needs to be made before a command line is sent, otherwise, no response will be sent.
 
+         Parameters
+         ----------
+         drone_id : int32_t
+             
          Yields
          -------
          data : std::string
@@ -223,6 +230,7 @@ class Shell(AsyncBase):
         """
 
         request = shell_pb2.SubscribeReceiveRequest()
+        request.drone_id = drone_id
         receive_stream = self._stub.SubscribeReceive(request)
 
         try:
